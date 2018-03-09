@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Dictionary</string>
+    <string name="btn_translate">Translate</string>
+    <string name="sym_to">-></string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="err_not_found_in_dictionary">Text not found in dictionary</string>
+    <string name="err_common">Can\'t translate message. Please check internet connection. Possibe it\'s internal error</string>
+    <string name="translating">Translating</string>
+    <string name="please_wait">Please wait</string>
+</resources>
