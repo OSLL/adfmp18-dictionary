@@ -8,4 +8,5 @@
     <string name="err_common">Can\'t translate message. Please check internet connection. Possibe it\'s internal error</string>
     <string name="translating">Translating</string>
     <string name="please_wait">Please wait</string>
+    <string name="title_activity_list_words">ListWordsActivity</string>
 </resources>
