@@ -9,4 +9,8 @@
     <string name="translating">Translating</string>
     <string name="please_wait">Please wait</string>
     <string name="title_activity_list_words">ListWordsActivity</string>
+    <string name="studied">На изучение</string>
+    <string name="study">Изученные</string>
+    <string name="word">word</string>
+    <string name="translate">translate</string>
 </resources>
