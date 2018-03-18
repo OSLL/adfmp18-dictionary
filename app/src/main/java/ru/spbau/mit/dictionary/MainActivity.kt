@@ -6,9 +6,21 @@ import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.view.View
 import kotlinx.android.synthetic.main.activity_list_words.*
 import ru.spbau.mit.dictionary.main.PagerAdapter
+import android.R.menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.widget.Toast
+import android.support.v4.widget.SearchViewCompat.setOnQueryTextListener
+import android.support.v4.widget.SearchViewCompat.setSearchableInfo
+import android.support.v4.widget.SearchViewCompat.setQueryHint
+import android.content.Context.SEARCH_SERVICE
+import android.app.SearchManager
+import android.content.Context
+import android.support.v7.widget.SearchView
 
 
 class MainActivity : AppCompatActivity() {
@@ -47,6 +59,51 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val menuInflater = menuInflater
+        menuInflater.inflate(R.menu.menu, menu)
+        //getting the search view from the menu
+        val searchViewItem = menu!!.findItem(R.id.menuSearch)
+
+        //getting search manager from systemservice
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        //getting the search view
+        val searchView = searchViewItem.actionView as SearchView
+
+        //you can put a hint for the search input field
+        searchView.queryHint = "Поиск слов..."
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+
+        //by setting it true we are making it iconified
+        //so the search input will show up after taping the search iconified
+        //if you want to make it visible all the time make it false
+        searchView.setIconifiedByDefault(true)
+
+        //here we will get the search query
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                // TODO("do search here"
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.menuAbout -> Toast.makeText(this, "You clicked about", Toast.LENGTH_SHORT).show()
+            R.id.menuSettings -> Toast.makeText(this, "You clicked settings", Toast.LENGTH_SHORT).show()
+            R.id.menuTest -> Toast.makeText(this, "You clicked test", Toast.LENGTH_SHORT).show()
+        }
+        return true
     }
 }
 //import android.app.Activity
