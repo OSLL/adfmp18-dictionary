@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Dictionary</string>
+    <string name="saveBtn">Save</string>
     <string name="btn_translate">Translate</string>
     <string name="sym_to">-></string>
     <string name="from">From</string>
