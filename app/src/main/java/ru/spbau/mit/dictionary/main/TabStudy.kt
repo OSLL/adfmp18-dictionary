@@ -21,10 +21,10 @@ class TabStudy : Fragment() {
     private fun getWords(): ArrayList<Word> {
         // TODO("get words from database")
         val wordList = ArrayList<Word>()
-        wordList.add(Word("house", ""))
-        wordList.add(Word("cat", ""))
-        wordList.add(Word("dog", ""))
-        wordList.add(Word("car", ""))
+        wordList.add(Word("house", arrayListOf("")))
+        wordList.add(Word("cat", arrayListOf("")))
+        wordList.add(Word("dog", arrayListOf("")))
+        wordList.add(Word("car", arrayListOf("")))
         return wordList
     }
 }

@@ -18,7 +18,7 @@ class DictAdapter(context: Context, private val wordList: ArrayList<Word>)
         val wordView = viewer.findViewById<TextView>(R.id.word)
         val translateView = viewer.findViewById<TextView>(R.id.translate)
         wordView.text = wordList[p0].word
-        translateView.text = wordList[p0].translate
+        translateView.text = wordList[p0].translate[0]
         return viewer
     }
 

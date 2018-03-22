@@ -21,9 +21,9 @@ class TabStudied : Fragment() {
     private fun getWords(): ArrayList<Word> {
         // TODO("get words from database")
         val wordList = ArrayList<Word>()
-        wordList.add(Word("hello", "привет"))
-        wordList.add(Word("name", "имя"))
-        wordList.add(Word("family", "семья"))
+        wordList.add(Word("hello", arrayListOf("привет")))
+        wordList.add(Word("name", arrayListOf("имя")))
+        wordList.add(Word("family", arrayListOf("семья")))
         return wordList
     }
 

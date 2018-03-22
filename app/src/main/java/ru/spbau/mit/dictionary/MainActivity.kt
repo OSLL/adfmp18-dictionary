@@ -20,7 +20,10 @@ import android.support.v4.widget.SearchViewCompat.setQueryHint
 import android.content.Context.SEARCH_SERVICE
 import android.app.SearchManager
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.SearchView
+import ru.spbau.mit.dictionary.main.Word
+import ru.spbau.mit.dictionary.study.StudyActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -55,10 +58,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
+//        fab.setOnClickListener { view ->
+//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show()
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -85,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         //here we will get the search query
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                // TODO("do search here"
+                // TODO("do search here")
                 return false
             }
 
@@ -101,7 +104,20 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.menuAbout -> Toast.makeText(this, "You clicked about", Toast.LENGTH_SHORT).show()
             R.id.menuSettings -> Toast.makeText(this, "You clicked settings", Toast.LENGTH_SHORT).show()
-            R.id.menuTest -> Toast.makeText(this, "You clicked test", Toast.LENGTH_SHORT).show()
+            R.id.menuTest -> {
+                // TODO ("get 10 words from database")
+                val words: ArrayList<Word> = ArrayList()
+                words.add(Word("hello", arrayListOf(getString(R.string.text))))
+                words.add(Word("name", arrayListOf(getString(R.string.text))))
+                words.add(Word("dog", arrayListOf(getString(R.string.text))))
+                words.add(Word("cat", arrayListOf(getString(R.string.text))))
+                words.add(Word("house", arrayListOf(getString(R.string.text))))
+                // ==================================
+                val intent = Intent(this, StudyActivity::class.java)
+                intent.putExtra("words", words)
+                startActivity(intent)
+                //                Toast.makeText(this, "You clicked test", Toast.LENGTH_SHORT).show()
+            }
         }
         return true
     }
