@@ -62,10 +62,27 @@
             </intent-filter>
             -->
         </activity>
+
+
         <activity
             android:name=".AddWordActivity"
+            android:windowSoftInputMode="stateUnchanged"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.AppCompat.Light.Dialog" />
+            android:autoRemoveFromRecents="true"
+            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="text/*"/>
+            </intent-filter>
+        </activity>
+
+
+        <!--<activity-->
+            <!--android:name=".AddWordActivity"-->
+            <!--android:launchMode="singleInstance"-->
+            <!--android:theme="@style/Theme.AppCompat.Light.Dialog" />-->
     </application>
 
 </manifest>

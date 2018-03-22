@@ -56,19 +56,19 @@ class MainActivity : AppCompatActivity() {
         })
 
 
-        val clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-
-        val mPrimaryChangeListener = OnPrimaryClipChangedListener {
-            val clipBoard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val item = clipBoard.primaryClip.getItemAt(0)
-            if (item.text != null) {
-                val intent = Intent(baseContext, AddWordActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.putExtra("word", item.text.toString())
-                baseContext.startActivity(intent)
-            }
-        }
-        clipboard.addPrimaryClipChangedListener(mPrimaryChangeListener)
+//        val clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//
+//        val mPrimaryChangeListener = OnPrimaryClipChangedListener {
+//            val clipBoard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//            val item = clipBoard.primaryClip.getItemAt(0)
+//            if (item.text != null) {
+//                val intent = Intent(baseContext, AddWordActivity::class.java)
+//                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NEW_TASK)
+//                intent.putExtra("word", item.text.toString())
+//                baseContext.startActivity(intent)
+//            }
+//        }
+//        clipboard.addPrimaryClipChangedListener(mPrimaryChangeListener)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
