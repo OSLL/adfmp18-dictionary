@@ -10,20 +10,17 @@ import android.view.Menu
 import android.view.View
 import kotlinx.android.synthetic.main.activity_list_words.*
 import ru.spbau.mit.dictionary.main.PagerAdapter
-import android.R.menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
-import android.support.v4.widget.SearchViewCompat.setOnQueryTextListener
-import android.support.v4.widget.SearchViewCompat.setSearchableInfo
-import android.support.v4.widget.SearchViewCompat.setQueryHint
-import android.content.Context.SEARCH_SERVICE
 import android.app.SearchManager
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.SearchView
 import ru.spbau.mit.dictionary.main.Word
 import ru.spbau.mit.dictionary.study.StudyActivity
+import android.content.ClipboardManager.OnPrimaryClipChangedListener
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -58,10 +55,24 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-//        }
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+        }
+
+        val clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+        val mPrimaryChangeListener = OnPrimaryClipChangedListener {
+            val clipBoard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val item = clipBoard.primaryClip.getItemAt(0)
+            if (item.text != null) {
+                val intent = Intent(baseContext, AddWordActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NEW_TASK)
+                intent.putExtra("word", item.text.toString())
+                baseContext.startActivity(intent)
+            }
+        }
+        clipboard.addPrimaryClipChangedListener(mPrimaryChangeListener)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
