@@ -2,6 +2,7 @@ package ru.spbau.mit.dictionary
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.ContentValues
 import android.content.res.Configuration
 import android.os.AsyncTask
 import android.os.Bundle
@@ -14,11 +15,16 @@ import android.widget.*
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import dictionary.yandex.api.com.WordDescription
+import ru.spbau.mit.data.DictionaryContract
+import ru.spbau.mit.data.DictionaryProvider
+import java.util.*
 
 
 class SearchActivity : AppCompatActivity(), View.OnClickListener {
 
     private var globalContext: GlobalContext? = null
+
+    private var description: WordDescription? = null
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -27,7 +33,24 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        globalContext = GlobalContext(this, this)
+        globalContext = GlobalContext(this, this, View.OnClickListener {
+
+            while (description == null) { // bug
+                Thread.sleep(300)
+            }
+
+            val list = description?.ranking!!
+            if (list.isEmpty()) {
+                return@OnClickListener
+            }
+
+            val values = ContentValues()
+            values.put(DictionaryContract.WordsEntry.COLUMN_NAME, list[0].text)
+            values.put(DictionaryContract.WordsEntry.COLUMN_HIDDEN, false)
+            values.put(DictionaryContract.WordsEntry.COLUMN_STATE, DictionaryContract.WordsEntry.STATE_ON_LEARNING)
+            values.put(DictionaryContract.WordsEntry.COLUMN_PRIORITY, 0)
+            contentResolver.insert(DictionaryProvider.CONTENT_URI, values)
+        })
         globalContext!!.onCreate()
         val intent = intent
         if (intent.getBooleanExtra(globalContext!!.FROM_PREV_ACTIVITY, true)) {
@@ -56,6 +79,7 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
 
         override fun onPreExecute() {
             super.onPreExecute()
+            this@SearchActivity.description = null
             progressDialog = ProgressDialog.show(this@SearchActivity, getString(R.string.translating), getString(R.string.please_wait), true)
             inputText = (findViewById<EditText>(R.id.input_text)).text.toString()
         }
@@ -77,6 +101,9 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
             val tv = findViewById<TextView>(R.id.panel_for_show_translated_text)
             val tableForPictures = findViewById<TableLayout>(R.id.table_for_pictures)
             tableForPictures.removeAllViews()
+
+            this@SearchActivity.description = description
+
             if (description == null) {
                 tv.text = getString(R.string.err_common)
             } else {

@@ -11,14 +11,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> -->
+        </activity>
         <activity
             android:name=".SearchActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -32,12 +31,21 @@
             android:name=".ListWordsActivity"
             android:label="@string/title_activity_list_words"
             android:theme="@style/AppTheme.NoActionBar">
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
+
+        <provider
+            android:name="ru.spbau.mit.data.DictionaryProvider"
+            android:authorities="ru.spbau.mit"
+            android:enabled="true"
+            android:exported="false" />
+
     </application>
 
 </manifest>

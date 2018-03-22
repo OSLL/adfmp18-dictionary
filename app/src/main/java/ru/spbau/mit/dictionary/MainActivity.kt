@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.d("OnCreate", "Start")
-        globalContext = GlobalContext(this, this)
+        globalContext = GlobalContext(this, this, View.OnClickListener {  })
         globalContext!!.onCreate()
     }
 

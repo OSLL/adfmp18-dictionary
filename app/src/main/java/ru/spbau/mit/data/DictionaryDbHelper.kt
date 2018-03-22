@@ -24,11 +24,12 @@ class DictionaryDbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_
     companion object {
         private const val SQL_CREATE_WORDS =
                 "CREATE TABLE ${DictionaryContract.WordsEntry.TABLE_NAME} (" +
-                        "${DictionaryContract.WordsEntry._ID} INTEGER PRIMARY KEY," +
-                        "${DictionaryContract.WordsEntry.COLUMN_NAME} TEXT NOT NULL," +
+                        "${DictionaryContract.WordsEntry._ID} INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "${DictionaryContract.WordsEntry.COLUMN_NAME} TEXT NOT NULL UNIQUE," +
                         "${DictionaryContract.WordsEntry.COLUMN_STATE} INTEGER NOT NULL DEFAULT ${DictionaryContract.WordsEntry.STATE_ON_LEARNING}," +
                         "${DictionaryContract.WordsEntry.COLUMN_HIDDEN} INTEGER NOT NULL DEFAULT 0," +
-                        "${DictionaryContract.WordsEntry.COLUMN_PRIORITY} INTEGER NOT NULL DEFAULT 0)"
+                        "${DictionaryContract.WordsEntry.COLUMN_PRIORITY} INTEGER NOT NULL DEFAULT 0," +
+                        "${DictionaryContract.WordsEntry.COLUMN_IMAGE} BLOB)"
 
         private const val SQL_DELETE_WORDS = "DROP TABLE IF EXISTS ${DictionaryContract.WordsEntry.TABLE_NAME}"
 

@@ -9,4 +9,5 @@
     <string name="translating">Translating</string>
     <string name="please_wait">Please wait</string>
     <string name="title_activity_list_words">ListWordsActivity</string>
+    <string name="btn_add_word">Add word</string>
 </resources>

@@ -1,5 +1,6 @@
 package ru.spbau.mit.dictionary
 
+import android.content.ContentResolver
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -8,8 +9,13 @@ import dictionary.yandex.api.com.Language
 import dictionary.yandex.api.com.Translate
 import dictionary.yandex.api.com.WordDescription
 import picture.bing.api.com.BingPicture
+import android.text.style.TtsSpan.GENDER_MALE
+import android.content.ContentValues
+import ru.spbau.mit.data.DictionaryContract
+import ru.spbau.mit.data.DictionaryProvider
 
-class GlobalContext constructor(private val activity: AppCompatActivity, private val clickListener: View.OnClickListener) {
+
+class GlobalContext constructor(private val activity: AppCompatActivity, private val clickListener: View.OnClickListener, private val clickAddWord: View.OnClickListener) {
     private val translate = Translate()
     private val bingPicture = BingPicture()
     private val data = arrayOf("English", "Russian", "French", "German", "Ukrainian")
@@ -20,6 +26,7 @@ class GlobalContext constructor(private val activity: AppCompatActivity, private
     private val spinnerLangFrom: Spinner
     private val spinnerLangTo: Spinner
     private val btnTranslate: Button
+    private val btnAddWord: Button
 
     val MESSAGE_FOR_SEARCH = "MESSAGE"
     val LANG_FROM = "LANG_FROM"
@@ -34,6 +41,7 @@ class GlobalContext constructor(private val activity: AppCompatActivity, private
         spinnerLangFrom = activity.findViewById(R.id.lang_from)
         spinnerLangTo = activity.findViewById(R.id.lang_to)
         btnTranslate = activity.findViewById(R.id.button_translate)
+        btnAddWord = activity.findViewById(R.id.button_add_word)
     }
 
     private fun getID(l: Language): Int {
@@ -43,6 +51,8 @@ class GlobalContext constructor(private val activity: AppCompatActivity, private
 
     fun onCreate() {
         btnTranslate.setOnClickListener(clickListener)
+        btnAddWord.setOnClickListener(clickAddWord)
+
         run {
             val adapter = ArrayAdapter(activity, android.R.layout.simple_spinner_item, data)
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

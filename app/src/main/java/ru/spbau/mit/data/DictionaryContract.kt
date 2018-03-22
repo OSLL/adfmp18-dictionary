@@ -11,6 +11,7 @@ object DictionaryContract {
         const val COLUMN_STATE = "state"
         const val COLUMN_HIDDEN = "hidden"
         const val COLUMN_PRIORITY = "priority"
+        const val COLUMN_IMAGE = "image"
 
         const val STATE_ON_LEARNING = 1
         const val STATE_STUDIED = 2
@@ -19,7 +20,7 @@ object DictionaryContract {
     object WordsRelation : BaseColumns {
         const val TABLE_NAME = "words_relation"
 
-        const val COLUMN_FROM = "from"
-        const val COLUMN_TO = "to"
+        const val COLUMN_FROM = "[from]"
+        const val COLUMN_TO = "[to]"
     }
 }
