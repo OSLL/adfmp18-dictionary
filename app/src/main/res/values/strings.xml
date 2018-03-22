@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Dictionary</string>
+    <string name="saveBtn">Save</string>
     <string name="btn_translate">Translate</string>
     <string name="sym_to">-></string>
     <string name="from">From</string>
@@ -10,4 +11,18 @@
     <string name="please_wait">Please wait</string>
     <string name="title_activity_list_words">ListWordsActivity</string>
     <string name="btn_add_word">Add word</string>
+    <string name="studied">На изучение</string>
+    <string name="study">Изученные</string>
+    <string name="word">word</string>
+    <string name="translate">translate</string>
+    <string name="about">О приложении</string>
+    <string name="settings">Настройки</string>
+    <string name="test">Тест</string>
+    <string name="search">Поиск</string>
+    <string name="text">"asjdbhakdksjdnlasdnslkdma;sdm;asmld;amls;dlma
+            ;smd;ams;dmalsdkmkamsdlkmlnajsdnjlasdasjdbhakdksjdnlasdnslkdma;sdm;asmld;amls;dlma
+            ;smd;ams;dmalsdkmkamsdlkmlnajsdnjlasdasjdbhakdksjdnlasdnslkdma;sdm;asmld;amls;dlma
+            ;smd;ams;dmalsdkmkamsdlkmlnajsdnjlasdasjdbhakdksjdnlasdnslkdma;sdm;asmld;amls;dlma
+            ;smd;ams;dmalsdkmkamsdlkmlnajsdnjlasd"</string>
+    <string name="words">"words"</string>
 </resources>
