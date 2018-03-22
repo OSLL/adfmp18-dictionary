@@ -33,9 +33,6 @@ class DictionaryProvider : ContentProvider() {
                 values.getAsInteger(DictionaryContract.WordsEntry.COLUMN_STATE) ?: throw IllegalArgumentException("Words requires valid state")
                 val database = dbHelper!!.writableDatabase
                 val id = database.insert(DictionaryContract.WordsEntry.TABLE_NAME, null, values)
-                if (id == -1L) {
-                    throw IllegalArgumentException("Insert is not valid $uri")
-                }
                 ContentUris.withAppendedId(uri, id)
             }
             else -> throw IllegalArgumentException("Insert is not supported for $uri")
@@ -45,7 +42,7 @@ class DictionaryProvider : ContentProvider() {
     override fun query(uri: Uri?, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor {
         val database = dbHelper!!.readableDatabase
         val match = sURIMatcher.match(uri)
-        return when (match) {
+        val cursor = when (match) {
             WORDS -> database.query(DictionaryContract.WordsEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder)
             WORD_ID -> {
                 val selection = DictionaryContract.WordsEntry._ID + "=?";
@@ -54,6 +51,8 @@ class DictionaryProvider : ContentProvider() {
             }
             else -> throw IllegalArgumentException("Cannot query unknown URI $uri")
         }
+        cursor.setNotificationUri(context.contentResolver, uri)
+        return cursor
     }
 
     override fun onCreate(): Boolean {

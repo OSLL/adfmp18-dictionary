@@ -8,4 +8,10 @@
     tools:context="ru.spbau.mit.dictionary.ListWordsActivity"
     tools:showIn="@layout/activity_list_words">
 
+    <ListView
+        android:id="@+id/list_words"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+
 </android.support.constraint.ConstraintLayout>
