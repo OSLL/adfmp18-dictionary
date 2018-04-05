@@ -20,7 +20,7 @@ class BingPicture : BingPictureAPI() {
         parameters.put("\$top", Integer.toString(count))
         parameters.put("\$skip", Integer.toString(offset))
         val requestProperty = Hashtable<String, String>()
-        requestProperty.put("Ocp-Apim-Subscription-Key", "2f7eed87304f41298e2874464892f418")
+        requestProperty.put("Ocp-Apim-Subscription-Key", "e48b80a0cf264666a40eb3896e27dfbf")
         val s = request.sendGet(parameters, requestProperty)
         Log.d("PICTURE", s)
         return parseResponse(s)
