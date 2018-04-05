@@ -27,9 +27,9 @@ class TabStudy : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onCreateLoader(id: Int, args: Bundle?): android.support.v4.content.Loader<Cursor> {
         return CursorLoader(this.context,
-                DictionaryProvider.CONTENT_URI,
+                DictionaryProvider.CONTENT_WORDS_ENTRY,
                 arrayOf(DictionaryContract.WordsEntry._ID, DictionaryContract.WordsEntry.COLUMN_NAME),
-                null,
+                "${DictionaryContract.WordsEntry.COLUMN_HIDDEN} = 0",
                 null,
                 null)
     }

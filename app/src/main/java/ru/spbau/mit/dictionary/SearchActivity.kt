@@ -17,7 +17,6 @@ import com.squareup.picasso.Picasso
 import dictionary.yandex.api.com.WordDescription
 import ru.spbau.mit.data.DictionaryContract
 import ru.spbau.mit.data.DictionaryProvider
-import java.util.*
 
 
 class SearchActivity : AppCompatActivity(), View.OnClickListener {
@@ -49,7 +48,7 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
             values.put(DictionaryContract.WordsEntry.COLUMN_HIDDEN, false)
             values.put(DictionaryContract.WordsEntry.COLUMN_STATE, DictionaryContract.WordsEntry.STATE_ON_LEARNING)
             values.put(DictionaryContract.WordsEntry.COLUMN_PRIORITY, 0)
-            contentResolver.insert(DictionaryProvider.CONTENT_URI, values)
+            contentResolver.insert(DictionaryProvider.CONTENT_WORDS_ENTRY, values)
 
         })
         globalContext!!.onCreate()

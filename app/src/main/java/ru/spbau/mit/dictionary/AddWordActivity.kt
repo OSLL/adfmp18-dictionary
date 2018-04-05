@@ -57,18 +57,6 @@ class AddWordActivity : AppCompatActivity() {
         if (sharedText != null) {
             val task = TranslateTask(sharedText)
             task.execute()
-           // val findViewById = findViewById<TextView>(R.id.wordTextView)
- //           val t = Thread(Runnable {
- //               val translateWord = translate.execute(sharedText, Language.ENGLISH, Language.RUSSIAN)
-//                val pictureURL = bingPicture.execute(sharedText, 1).contentUrlList
- //               findViewById.text = Html.fromHtml(translateWord.toString())
-//                Picasso.with(this@AddWordActivity)
-//                        .load(pictureURL[0])
-//                        .resize(width, height)
-//                        .into(findViewById<ImageView>(R.id.wordImage))
-  //          })
-   //         t.start()
-    //        t.join()
         }
     }
 
@@ -92,7 +80,7 @@ class AddWordActivity : AppCompatActivity() {
             super.onPostExecute(result)
             progressBar.visibility = View.INVISIBLE
             val view = findViewById<TextView>(R.id.wordTextView)
-            if (result != null) {
+            if (result != null && !result.ranking.isEmpty()) {
 
                 view.text = "$sharedText -> ${result.ranking.first { it.text != null }.translation.first { it.text != null }.text}"
                 val saveButton = findViewById<Button>(R.id.saveWord)
@@ -105,20 +93,59 @@ class AddWordActivity : AppCompatActivity() {
                     values.put(DictionaryContract.WordsEntry.COLUMN_STATE, DictionaryContract.WordsEntry.STATE_ON_LEARNING)
                     values.put(DictionaryContract.WordsEntry.COLUMN_PRIORITY, 0)
                     try {
-                        contentResolver.insert(DictionaryProvider.CONTENT_URI, values)
+                        contentResolver.insert(DictionaryProvider.CONTENT_WORDS_ENTRY, values)
                     } catch (e: Exception) {
                     }
 
+                    for (translate in result.ranking.first { it.text != null }.translation) {
+                        if (translate.text != null) {
+                            val values = ContentValues()
+                            values.put(DictionaryContract.WordsEntry.COLUMN_NAME, translate.text)
+                            values.put(DictionaryContract.WordsEntry.COLUMN_HIDDEN, true)
+                            values.put(DictionaryContract.WordsEntry.COLUMN_STATE, DictionaryContract.WordsEntry.STATE_STUDIED)
+                            values.put(DictionaryContract.WordsEntry.COLUMN_PRIORITY, 0)
+                            try {
+                                contentResolver.insert(DictionaryProvider.CONTENT_WORDS_ENTRY, values)
+                            } catch (e: Exception) {
+                            }
+                        }
+                    }
+
+                    var idWord = -1
                     contentResolver.query(
-                            DictionaryProvider.CONTENT_URI,   // The content URI of the words table
+                            DictionaryProvider.CONTENT_WORDS_ENTRY,   // The content URI of the words table
                             null,                        // The columns to return for each row
-                            null,                  // Selection criteria
+                            "${DictionaryContract.WordsEntry.COLUMN_NAME} = \"$sharedText\"",                  // Selection criteria
                             null,                     // Selection criteria
                             null).use {
-                        while (it.moveToNext()) {
-                            val id = it.getColumnIndex(DictionaryContract.WordsEntry.COLUMN_NAME)
-                            val name = it.getString(id)
-                            Log.d("DB", name)
+                        if (it.moveToNext()) {
+                            idWord = it.getInt(0);
+                        }
+                    }
+
+                    if (idWord == -1) {
+                        return@setOnClickListener
+                    }
+
+                    for (translate in result.ranking.first { it.text != null }.translation) {
+                        if (translate.text != null) {
+                            contentResolver.query(
+                                    DictionaryProvider.CONTENT_WORDS_ENTRY,   // The content URI of the words table
+                                    null,                        // The columns to return for each row
+                                    "${DictionaryContract.WordsEntry.COLUMN_NAME} = \"${translate.text}\"",                  // Selection criteria
+                                    null,                     // Selection criteria
+                                    null).use {
+                                if (it.moveToNext()) {
+                                    val id = it.getInt(0)
+                                    val values = ContentValues()
+                                    values.put(DictionaryContract.WordsRelation.COLUMN_FROM, idWord)
+                                    values.put(DictionaryContract.WordsRelation.COLUMN_TO, id)
+                                    try {
+                                        contentResolver.insert(DictionaryProvider.CONTENT_WORDS_RELATION, values)
+                                    } catch (e: Exception) {
+                                    }
+                                }
+                            }
                         }
                     }
                 }

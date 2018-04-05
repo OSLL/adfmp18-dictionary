@@ -16,7 +16,7 @@ import ru.spbau.mit.data.DictionaryProvider
 class ListWordsActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
         return CursorLoader(this,
-                DictionaryProvider.CONTENT_URI,
+                DictionaryProvider.CONTENT_WORDS_ENTRY,
                 arrayOf(DictionaryContract.WordsEntry._ID, DictionaryContract.WordsEntry.COLUMN_NAME),
                 null,
                 null,
