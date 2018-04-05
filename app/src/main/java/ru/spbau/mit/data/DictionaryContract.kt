@@ -12,7 +12,7 @@ object DictionaryContract {
         const val COLUMN_HIDDEN = "hidden"
         const val COLUMN_PRIORITY = "priority"
         const val COLUMN_IMAGE = "image"
-
+        
         const val STATE_ON_LEARNING = 1
         const val STATE_STUDIED = 2
     }

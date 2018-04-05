@@ -29,7 +29,7 @@ class TabStudy : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         return CursorLoader(this.context,
                 DictionaryProvider.CONTENT_WORDS_ENTRY,
                 arrayOf(DictionaryContract.WordsEntry._ID, DictionaryContract.WordsEntry.COLUMN_NAME),
-                "${DictionaryContract.WordsEntry.COLUMN_HIDDEN} = 0",
+                "${DictionaryContract.WordsEntry.COLUMN_HIDDEN} = 0 AND ${DictionaryContract.WordsEntry.COLUMN_STATE} = ${DictionaryContract.WordsEntry.STATE_ON_LEARNING}",
                 null,
                 null)
     }
