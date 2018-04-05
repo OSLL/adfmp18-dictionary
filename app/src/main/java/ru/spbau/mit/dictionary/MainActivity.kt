@@ -1,26 +1,21 @@
 package ru.spbau.mit.dictionary
 
+import android.app.SearchManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.Menu
-import android.view.View
-import kotlinx.android.synthetic.main.activity_list_words.*
-import ru.spbau.mit.dictionary.main.PagerAdapter
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
-import android.app.SearchManager
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.support.v7.widget.SearchView
+import ru.spbau.mit.dictionary.main.PagerAdapter
 import ru.spbau.mit.dictionary.main.Word
 import ru.spbau.mit.dictionary.study.StudyActivity
-import android.content.ClipboardManager.OnPrimaryClipChangedListener
-
 
 
 class MainActivity : AppCompatActivity() {

@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.LoaderManager
 import android.support.v4.content.CursorLoader
-import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ListView
 import ru.spbau.mit.adapters.WordsCursorAdapter
 import ru.spbau.mit.data.DictionaryContract
@@ -42,7 +42,7 @@ class TabStudied : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootViewer = inflater!!.inflate(R.layout.tab_study, container, false)
         val listView = rootViewer.findViewById<ListView>(R.id.list_view)
-        cursorAdapter = WordsCursorAdapter(context, null)
+        cursorAdapter = WordsCursorAdapter(context, null, DictionaryContract.WordsEntry.STATE_STUDIED)
         listView.adapter = cursorAdapter
         loaderManager.initLoader(WORDS_LOADER, null, this)
         return rootViewer

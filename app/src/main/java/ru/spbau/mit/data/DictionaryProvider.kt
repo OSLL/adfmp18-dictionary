@@ -75,18 +75,33 @@ class DictionaryProvider : ContentProvider() {
     }
 
     override fun update(uri: Uri?, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
-        TODO("not implemented")
+        val match = sURIMatcher.match(uri)
+        return when (match) {
+            WORDS -> {
+                val database = dbHelper!!.writableDatabase
+                val r = database.update(DictionaryContract.WordsEntry.TABLE_NAME, values, selection, selectionArgs)
+                context.contentResolver.notifyChange(uri, null)
+                r
+            }
+            else -> throw IllegalArgumentException("Cannot query unknown URI $uri")
+        }
     }
 
     override fun delete(uri: Uri?, selection: String?, selectionArgs: Array<out String>?): Int {
         val database = dbHelper!!.writableDatabase
         val match = sURIMatcher.match(uri)
         return when (match) {
-            WORDS -> database.delete(DictionaryContract.WordsEntry.TABLE_NAME, selection, selectionArgs)
+            WORDS -> {
+                val r = database.delete(DictionaryContract.WordsEntry.TABLE_NAME, selection, selectionArgs)
+                context.contentResolver.notifyChange(uri, null)
+                r
+            }
             WORD_ID -> {
                 val selection = DictionaryContract.WordsEntry._ID + "=?";
                 val selectionArgs = Array<String>(1) { valueOf(ContentUris.parseId(uri)) }
-                database.delete(DictionaryContract.WordsEntry.TABLE_NAME, selection, selectionArgs)
+                val r = database.delete(DictionaryContract.WordsEntry.TABLE_NAME, selection, selectionArgs)
+                context.contentResolver.notifyChange(uri, null)
+                r
             }
             else -> throw IllegalArgumentException("Deletion is not supported for $uri");
         }

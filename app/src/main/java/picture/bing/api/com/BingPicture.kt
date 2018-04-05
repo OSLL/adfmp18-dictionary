@@ -1,11 +1,8 @@
 package picture.bing.api.com
 
-import android.util.Base64
 import android.util.Log
-
 import get.protocol.com.GETRequest
-
-import java.util.Hashtable
+import java.util.*
 
 class BingPicture : BingPictureAPI() {
 

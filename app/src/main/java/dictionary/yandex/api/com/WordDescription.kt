@@ -1,6 +1,6 @@
 package dictionary.yandex.api.com
 
-import java.util.ArrayList
+import java.util.*
 
 class WordDescription {
 

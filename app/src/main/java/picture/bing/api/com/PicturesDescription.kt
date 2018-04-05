@@ -1,6 +1,6 @@
 package picture.bing.api.com
 
-import java.util.ArrayList
+import java.util.*
 
 class PicturesDescription {
     private val pictures = ArrayList<PictureDescription>()

@@ -1,8 +1,7 @@
 package dictionary.yandex.api.com
 
 import get.protocol.com.GETRequest
-
-import java.util.Hashtable
+import java.util.*
 
 
 class Translate : YandexTranslatorAPI() {

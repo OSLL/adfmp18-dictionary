@@ -17,8 +17,7 @@ class StudyActivity : AppCompatActivity() {
 
     private fun show(word: Word) {
         wordView.text = word.word
-        ftv.text = word.translate.reduce{
-            acc, s ->
+        ftv.text = word.translate.reduce { acc, s ->
             "$acc;\n$s"
         }
     }
