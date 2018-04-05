@@ -50,6 +50,7 @@ class SearchActivity : AppCompatActivity(), View.OnClickListener {
             values.put(DictionaryContract.WordsEntry.COLUMN_STATE, DictionaryContract.WordsEntry.STATE_ON_LEARNING)
             values.put(DictionaryContract.WordsEntry.COLUMN_PRIORITY, 0)
             contentResolver.insert(DictionaryProvider.CONTENT_URI, values)
+
         })
         globalContext!!.onCreate()
         val intent = intent

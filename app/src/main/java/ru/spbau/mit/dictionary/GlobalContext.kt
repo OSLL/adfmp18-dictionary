@@ -1,6 +1,5 @@
 package ru.spbau.mit.dictionary
 
-import android.content.ContentResolver
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -9,10 +8,6 @@ import dictionary.yandex.api.com.Language
 import dictionary.yandex.api.com.Translate
 import dictionary.yandex.api.com.WordDescription
 import picture.bing.api.com.BingPicture
-import android.text.style.TtsSpan.GENDER_MALE
-import android.content.ContentValues
-import ru.spbau.mit.data.DictionaryContract
-import ru.spbau.mit.data.DictionaryProvider
 
 
 class GlobalContext constructor(private val activity: AppCompatActivity, private val clickListener: View.OnClickListener, private val clickAddWord: View.OnClickListener) {
@@ -115,16 +110,6 @@ class GlobalContext constructor(private val activity: AppCompatActivity, private
         putExtra(intent)
         activity.setResult(resultCode, intent)
         activity.finish()
-    }
-
-    fun startActivityForResult(cl: Class<*>, requestCode: Int) {
-        val intent = Intent(activity, cl)
-        val message = inputText.text.toString()
-        intent.putExtra(MESSAGE_FOR_SEARCH, message)
-        intent.putExtra(LANG_FROM, langFrom.toString())
-        intent.putExtra(LANG_TO, langTo.toString())
-        intent.putExtra(FROM_PREV_ACTIVITY, true)
-        activity.startActivityForResult(intent, requestCode)
     }
 
     @Throws(Exception::class)

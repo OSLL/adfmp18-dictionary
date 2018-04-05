@@ -2,25 +2,22 @@ package ru.spbau.mit.dictionary.study
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import ru.spbau.mit.dictionary.R
-import android.widget.TextView
 import android.util.Log
-import android.view.View
 import android.widget.ImageButton
+import kotlinx.android.synthetic.main.activity_study.*
+import ru.spbau.mit.dictionary.R
 import ru.spbau.mit.dictionary.main.Word
-import uk.co.deanwild.flowtextview.FlowTextView
 
 
 class StudyActivity : AppCompatActivity() {
+
 
     private lateinit var words: List<Word>
     private var current: Int = 0
 
     private fun show(word: Word) {
-        val wordView = findViewById<TextView>(R.id.wordView)
         wordView.text = word.word
-        val flowTextView = findViewById<View>(R.id.ftv) as FlowTextView
-        flowTextView.text = word.translate.reduce{
+        ftv.text = word.translate.reduce{
             acc, s ->
             "$acc;\n$s"
         }

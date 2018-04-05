@@ -47,7 +47,7 @@ class ListWordsActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cur
             startActivityForResult(intent, 0)
         }
 
-        loaderManager.initLoader(WORDS_LOADER, null, this);
+        loaderManager.initLoader(WORDS_LOADER, null, this)
     }
 
 }
