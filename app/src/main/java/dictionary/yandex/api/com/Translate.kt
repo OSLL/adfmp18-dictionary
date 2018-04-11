@@ -11,9 +11,9 @@ class Translate : YandexTranslatorAPI() {
     @Throws(Exception::class)
     fun execute(text: String, from: Language, to: Language): WordDescription {
         val parameters = Hashtable<String, String>()
-        parameters.put("key", apiKey)
-        parameters.put("text", text)
-        parameters.put("lang", from.toString() + "-" + to)
+        parameters["key"] = apiKey
+        parameters["text"] = text
+        parameters["lang"] = from.toString() + "-" + to
         return parseResponse(request.sendGet(parameters))
     }
 }
