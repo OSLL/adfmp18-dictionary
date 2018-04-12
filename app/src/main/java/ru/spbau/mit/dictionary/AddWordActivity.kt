@@ -25,6 +25,7 @@ import ru.spbau.mit.data.DictionaryContract
 import ru.spbau.mit.data.DictionaryProvider
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Point
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -41,11 +42,16 @@ import java.util.concurrent.locks.ReentrantLock
 class AddWordActivity : AppCompatActivity() {
     private val translate = Translate()
     private val bingPicture = BingPicture()
-    private val width = 200
-    private val height = 200
+    private var width = 400
+    private var height = 400
     private var imageInByte : ByteArray? = null
 
     init {
+//        val defaultDisplay = windowManager.defaultDisplay
+//        var p = Point()
+//        defaultDisplay.getSize(p)
+//        width = p.x
+//        height = p.y / 3
         translate.setKey("dict.1.1.20160306T093514Z.bbb9e3db01cef073.d0356e388174436a1f2c93cce683819103ec4579")
         bingPicture.setKey("e48b80a0cf264666a40eb3896e27dfbf")
 
@@ -162,8 +168,10 @@ class AddWordActivity : AppCompatActivity() {
             }
             else {
                 Log.d("LOAD", "YES")
-                val decodeByteArray = BitmapFactory.decodeByteArray(imageInByte, 0, imageInByte!!.size)
-                imgView.setImageBitmap(decodeByteArray)
+                if (imageInByte != null) {
+                    val decodeByteArray = BitmapFactory.decodeByteArray(imageInByte, 0, imageInByte!!.size)
+                    imgView.setImageBitmap(decodeByteArray)
+                }
             }
             if (result != null && !result.ranking.isEmpty()) {
 
