@@ -41,6 +41,11 @@
             -->
         </activity>
 
+        <activity android:name=".StartTestWordActivity"
+            android:label="@string/title_activity_start_test_word"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
         <provider
             android:name="ru.spbau.mit.data.DictionaryProvider"
             android:authorities="ru.spbau.mit"

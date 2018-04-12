@@ -1,5 +1,6 @@
 package ru.spbau.mit.dictionary.study
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import ru.spbau.mit.dictionary.R
@@ -7,6 +8,7 @@ import android.widget.TextView
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import ru.spbau.mit.dictionary.StartTestWordActivity
 import ru.spbau.mit.dictionary.main.Word
 import uk.co.deanwild.flowtextview.FlowTextView
 
@@ -32,24 +34,32 @@ class StudyActivity : AppCompatActivity() {
 
         val nextButton = findViewById<ImageButton>(R.id.next)
         val prevButton = findViewById<ImageButton>(R.id.prev)
-        prevButton.isClickable = false
+//        prevButton.isClickable = false
+        prevButton.isEnabled = false
 
         nextButton.setOnClickListener {
-            show(words[++current])
-            prevButton.isClickable = true
             if (current == words.size - 1) {
-                Log.d("next", "clickable = false")
-                it.isClickable = false
-                current = words.size - 1
+                val intent = Intent(this, StartTestWordActivity::class.java)
+                startActivity(intent)
+            } else {
+                show(words[++current])
+                prevButton.isEnabled = true
+//                if (current == words.size - 1) {
+//                    Log.d("next", "clickable = false")
+//                    it.isClickable = false
+//                    current = words.size - 1
+//                }
             }
+
         }
 
         prevButton.setOnClickListener {
+            Log.d("", "")
             show(words[--current])
-            nextButton.isClickable = true
+            nextButton.isEnabled = true
             if (current == 0) {
                 Log.d("prev", "clickable = false")
-                it.isClickable = false
+                it.isEnabled = false
             }
         }
 
