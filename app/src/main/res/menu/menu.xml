@@ -5,24 +5,24 @@
     android:layout_width="match_parent">
 
     <!-- our search option -->
-    <item
-        android:id="@+id/menuSearch"
-        android:icon="@drawable/icon_search"
-        android:orderInCategory="100"
-        android:title="@string/search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="always" />
+    <!--<item-->
+        <!--android:id="@+id/menuSearch"-->
+        <!--android:icon="@drawable/icon_search"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="@string/search"-->
+        <!--app:actionViewClass="android.support.v7.widget.SearchView"-->
+        <!--app:showAsAction="always" />-->
 
     <item
         android:id="@+id/menuTest"
         android:title="@string/test" />
 
-    <item
-        android:id="@+id/menuSettings"
-        android:title="@string/settings" />
+    <!--<item-->
+        <!--android:id="@+id/menuSettings"-->
+        <!--android:title="@string/settings" />-->
 
-    <item
-        android:id="@+id/menuAbout"
-        android:title="@string/about" />
+    <!--<item-->
+        <!--android:id="@+id/menuAbout"-->
+        <!--android:title="@string/about" />-->
 
 </menu>

@@ -7,12 +7,12 @@
     tools:context="ru.spbau.mit.dictionary.study.StartTestWordActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Press start"
-        android:id="@+id/textView" />
+        android:text="Press start to start testing" />
 
     <Button
         android:id="@+id/start_test"
