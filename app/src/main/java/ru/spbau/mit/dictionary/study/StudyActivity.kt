@@ -33,6 +33,8 @@ class StudyActivity : AppCompatActivity() {
             val img = word.img!!
             val bmp = BitmapFactory.decodeByteArray(img, 0, img.size)
             imageView.setImageBitmap(Bitmap.createBitmap(bmp))
+        } else {
+            imageView.setImageResource(R.drawable.imagenotavailable)
         }
     }
 
@@ -98,7 +100,8 @@ class StudyActivity : AppCompatActivity() {
                     val wordId = it.getInt(it.getColumnIndex(DictionaryContract.WordsEntry._ID))
                     val word = it.getString(it.getColumnIndex(DictionaryContract.WordsEntry.COLUMN_NAME))
                     val img = it.getBlob(it.getColumnIndexOrThrow(DictionaryContract.WordsEntry.COLUMN_IMAGE))
-                    words.add(Word(wordId, word, emptyList(), img))
+                    val priority = it.getInt(it.getColumnIndexOrThrow(DictionaryContract.WordsEntry.COLUMN_PRIORITY))
+                    words.add(Word(wordId, word, emptyList(), img, priority))
                 } else {
                     break
                 }
