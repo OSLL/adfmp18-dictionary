@@ -1,5 +1,6 @@
 package ru.spbau.mit.dictionary
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.os.AsyncTask
@@ -18,22 +19,50 @@ import dictionary.yandex.api.com.Language
 import dictionary.yandex.api.com.Translate
 import dictionary.yandex.api.com.WordDescription
 import picture.bing.api.com.BingPicture
-import picture.bing.api.com.PicturesDescription
 import ru.spbau.mit.data.DictionaryContract
 import ru.spbau.mit.data.DictionaryProvider
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.util.Log
+import com.squareup.picasso.Transformation
 import java.io.ByteArrayOutputStream
 
+class BitmapTransform(private val maxWidth: Int, private val maxHeight: Int) : Transformation {
+
+    override fun transform(source: Bitmap): Bitmap {
+        val targetWidth: Int
+        val targetHeight: Int
+        val aspectRatio: Double
+
+        if (source.width > source.height) {
+            targetWidth = maxWidth
+            aspectRatio = source.height.toDouble() / source.width.toDouble()
+            targetHeight = (targetWidth * aspectRatio).toInt()
+        } else {
+            targetHeight = maxHeight
+            aspectRatio = source.width.toDouble() / source.height.toDouble()
+            targetWidth = (targetHeight * aspectRatio).toInt()
+        }
+
+        val result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight, false)
+        if (result != source) {
+            source.recycle()
+        }
+        return result
+    }
+
+    override fun key(): String {
+        return maxWidth.toString() + "x" + maxHeight
+    }
+
+}
 
 class AddWordActivity : AppCompatActivity() {
     private val translate = Translate()
     private val bingPicture = BingPicture()
-    private var width = 50
-    private var height = 50
-    private var imageInByte : ByteArray? = null
+    private var width = 200
+    private var height = 200
 
     init {
         translate.setKey("dict.1.1.20160306T093514Z.bbb9e3db01cef073.d0356e388174436a1f2c93cce683819103ec4579")
@@ -56,7 +85,7 @@ class AddWordActivity : AppCompatActivity() {
         }
     }
 
-    fun handleSendText(intent: Intent) {
+    private fun handleSendText(intent: Intent) {
         val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT)
         if (sharedText != null) {
             val task = TranslateTask(sharedText)
@@ -64,36 +93,13 @@ class AddWordActivity : AppCompatActivity() {
         }
     }
 
-    internal inner class FindPicture(private val sharedText: String) : AsyncTask<Void, Void?, PicturesDescription?>() {
-        override fun doInBackground(vararg p0: Void?): PicturesDescription? {
-            return try {
-                Log.d("WOW2", "Start")
-                var out = bingPicture.execute(sharedText, 10)
-                Log.d("WOW2", "End")
-                out
-            } catch (e : Exception) {
-                null
-            }
-        }
-
-        override fun onPostExecute(result: PicturesDescription?) {
-            val imgView = findViewById<ImageView>(R.id.wordImage)
-            val urlList = bingPicture.execute(sharedText, 10).contentUrlList
-            Picasso.with(this@AddWordActivity)
-                    .load(urlList[0])
-                    .resize(width, height)
-                    .fit()
-                    .centerCrop()
-                    .into(imgView)
-        }
-    }
-
+    @SuppressLint("StaticFieldLeak")
     internal inner class TranslateTask(private val sharedText: String) : AsyncTask<Void, Void?, WordDescription?>() {
         private val progressBar = findViewById<ProgressBar>(R.id.progressbar)
-        private lateinit var urlList : List<String>
-        private var imageInByte : ByteArray? = null
-        private var bitmap : Bitmap? = null
-        private var isLoadPicture : Boolean = false
+        private lateinit var urlList: List<String>
+        private var imageInByte: ByteArray? = null
+        private var bitmap: Bitmap? = null
+        private var isLoadPicture: Boolean = false
         override fun onPreExecute() {
             super.onPreExecute()
             progressBar.visibility = View.VISIBLE
@@ -101,19 +107,17 @@ class AddWordActivity : AppCompatActivity() {
                     DictionaryProvider.CONTENT_WORDS_ENTRY,
                     null,
                     "${DictionaryContract.WordsEntry.COLUMN_NAME} = '$sharedText'",
-                    null, null).use { if (it.moveToNext()) {
-                imageInByte = it.getBlob(it.getColumnIndex(DictionaryContract.WordsEntry.COLUMN_IMAGE))
-                isLoadPicture = true
-            } }
+                    null, null).use {
+                if (it.moveToNext()) {
+                    imageInByte = it.getBlob(it.getColumnIndex(DictionaryContract.WordsEntry.COLUMN_IMAGE))
+                    isLoadPicture = true
+                }
+            }
         }
 
         override fun doInBackground(vararg params: Void): WordDescription? {
             if (!isLoadPicture)
                 urlList = bingPicture.execute(sharedText, 10).contentUrlList
-//            val bitmap = (imgView.drawable as BitmapDrawable).bitmap
-//            val baos = ByteArrayOutputStream()
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-//            imageInByte = baos.toByteArray()
             return try {
                 translate.execute(sharedText, Language.ENGLISH, Language.RUSSIAN)
 
@@ -122,17 +126,18 @@ class AddWordActivity : AppCompatActivity() {
             }
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onPostExecute(result: WordDescription?) {
             super.onPostExecute(result)
             progressBar.visibility = View.INVISIBLE
             val view = findViewById<TextView>(R.id.wordTextView)
             val imgView = findViewById<ImageView>(R.id.wordImage)
-            var t : com.squareup.picasso.Target = object : com.squareup.picasso.Target {
+            val t: com.squareup.picasso.Target = object : com.squareup.picasso.Target {
                 override fun onBitmapFailed(errorDrawable: Drawable?) {
-                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
                 }
 
                 override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                    Log.d("GC", "CALL")
                     this@TranslateTask.bitmap = bitmap
                     imgView.setImageBitmap(bitmap)
                 }
@@ -144,24 +149,36 @@ class AddWordActivity : AppCompatActivity() {
             }
             if (!isLoadPicture) {
                 Log.d("LOAD", "NO")
-                Picasso.with(this@AddWordActivity)
-                        .load(urlList[0])
-                        .resize(width, height)
-                        .centerCrop()
-                        .into(t)
-            }
-            else {
+                for (item in urlList) {
+                    try {
+                        Picasso.with(this@AddWordActivity)
+                                .load(item)
+                                .transform( BitmapTransform(width, height))
+                                .skipMemoryCache()
+                                .resize(Math.ceil(Math.sqrt((width * height).toDouble())).toInt(), Math.ceil(Math.sqrt((width * height).toDouble())).toInt())
+                                .centerInside()
+                                .into(t)
+                        Log.d("LOAD", item)
+                        break
+                    } catch (ex : Exception) {
+
+                    }
+                }
+            } else {
                 Log.d("LOAD", "YES")
                 if (imageInByte != null) {
                     val decodeByteArray = BitmapFactory.decodeByteArray(imageInByte, 0, imageInByte!!.size)
                     imgView.setImageBitmap(decodeByteArray)
                 }
+
             }
             if (result != null && !result.ranking.isEmpty()) {
 
                 view.text = "$sharedText -> ${result.ranking.first { it.text != null }.translation.first { it.text != null }.text}"
                 val saveButton = findViewById<Button>(R.id.saveWord)
-                saveButton.visibility = View.VISIBLE
+                if (!isLoadPicture) {
+                    saveButton.visibility = View.VISIBLE
+                }
                 saveButton.setOnClickListener {
                     val values = ContentValues()
                     values.put(DictionaryContract.WordsEntry.COLUMN_NAME, sharedText)
@@ -169,7 +186,7 @@ class AddWordActivity : AppCompatActivity() {
                     values.put(DictionaryContract.WordsEntry.COLUMN_STATE, DictionaryContract.WordsEntry.STATE_ON_LEARNING)
                     values.put(DictionaryContract.WordsEntry.COLUMN_PRIORITY, 0)
                     if (this@TranslateTask.bitmap != null) {
-                        val baos = ByteArrayOutputStream()//and then I convert that image into a byteArray
+                        val baos = ByteArrayOutputStream()
                         this@TranslateTask.bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
                         imageInByte = baos.toByteArray()
                         values.put(DictionaryContract.WordsEntry.COLUMN_IMAGE, imageInByte)
@@ -181,13 +198,13 @@ class AddWordActivity : AppCompatActivity() {
 
                     for (translate in result.ranking.first { it.text != null }.translation) {
                         if (translate.text != null) {
-                            val values = ContentValues()
-                            values.put(DictionaryContract.WordsEntry.COLUMN_NAME, translate.text)
-                            values.put(DictionaryContract.WordsEntry.COLUMN_HIDDEN, true)
-                            values.put(DictionaryContract.WordsEntry.COLUMN_STATE, DictionaryContract.WordsEntry.STATE_STUDIED)
-                            values.put(DictionaryContract.WordsEntry.COLUMN_PRIORITY, 0)
+                            val contentValues = ContentValues()
+                            contentValues.put(DictionaryContract.WordsEntry.COLUMN_NAME, translate.text)
+                            contentValues.put(DictionaryContract.WordsEntry.COLUMN_HIDDEN, true)
+                            contentValues.put(DictionaryContract.WordsEntry.COLUMN_STATE, DictionaryContract.WordsEntry.STATE_STUDIED)
+                            contentValues.put(DictionaryContract.WordsEntry.COLUMN_PRIORITY, 0)
                             try {
-                                contentResolver.insert(DictionaryProvider.CONTENT_WORDS_ENTRY, values)
+                                contentResolver.insert(DictionaryProvider.CONTENT_WORDS_ENTRY, contentValues)
                             } catch (e: Exception) {
                             }
                         }
@@ -195,13 +212,13 @@ class AddWordActivity : AppCompatActivity() {
 
                     var idWord = -1
                     contentResolver.query(
-                            DictionaryProvider.CONTENT_WORDS_ENTRY,   // The content URI of the words table
-                            null,                        // The columns to return for each row
-                            "${DictionaryContract.WordsEntry.COLUMN_NAME} = \"$sharedText\"",                  // Selection criteria
-                            null,                     // Selection criteria
+                            DictionaryProvider.CONTENT_WORDS_ENTRY,
+                            null,
+                            "${DictionaryContract.WordsEntry.COLUMN_NAME} = \"$sharedText\"",
+                            null,
                             null).use {
                         if (it.moveToNext()) {
-                            idWord = it.getInt(0);
+                            idWord = it.getInt(0)
                         }
                     }
 
@@ -212,24 +229,25 @@ class AddWordActivity : AppCompatActivity() {
                     for (translate in result.ranking.first { it.text != null }.translation) {
                         if (translate.text != null) {
                             contentResolver.query(
-                                    DictionaryProvider.CONTENT_WORDS_ENTRY,   // The content URI of the words table
-                                    null,                        // The columns to return for each row
-                                    "${DictionaryContract.WordsEntry.COLUMN_NAME} = \"${translate.text}\"",                  // Selection criteria
-                                    null,                     // Selection criteria
+                                    DictionaryProvider.CONTENT_WORDS_ENTRY,
+                                    null,
+                                    "${DictionaryContract.WordsEntry.COLUMN_NAME} = \"${translate.text}\"",
+                                    null,
                                     null).use {
                                 if (it.moveToNext()) {
                                     val id = it.getInt(0)
-                                    val values = ContentValues()
-                                    values.put(DictionaryContract.WordsRelation.COLUMN_FROM, idWord)
-                                    values.put(DictionaryContract.WordsRelation.COLUMN_TO, id)
+                                    val contentValues = ContentValues()
+                                    contentValues.put(DictionaryContract.WordsRelation.COLUMN_FROM, idWord)
+                                    contentValues.put(DictionaryContract.WordsRelation.COLUMN_TO, id)
                                     try {
-                                        contentResolver.insert(DictionaryProvider.CONTENT_WORDS_RELATION, values)
+                                        contentResolver.insert(DictionaryProvider.CONTENT_WORDS_RELATION, contentValues)
                                     } catch (e: Exception) {
                                     }
                                 }
                             }
                         }
                     }
+                    finish()
                 }
             } else {
                 view.text = "Problem with translation"
