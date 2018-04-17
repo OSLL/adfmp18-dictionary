@@ -23,10 +23,11 @@ import ru.spbau.mit.data.DictionaryContract
 import ru.spbau.mit.data.DictionaryProvider
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
+import android.graphics.drawable.BitmapDrawable
 import android.util.Log
 import com.squareup.picasso.Transformation
 import java.io.ByteArrayOutputStream
+
 
 class BitmapTransform(private val maxWidth: Int, private val maxHeight: Int) : Transformation {
 
@@ -61,8 +62,8 @@ class BitmapTransform(private val maxWidth: Int, private val maxHeight: Int) : T
 class AddWordActivity : AppCompatActivity() {
     private val translate = Translate()
     private val bingPicture = BingPicture()
-    private var width = 200
-    private var height = 200
+    private var width = 350
+    private var height = 350
 
     init {
         translate.setKey("dict.1.1.20160306T093514Z.bbb9e3db01cef073.d0356e388174436a1f2c93cce683819103ec4579")
@@ -131,39 +132,48 @@ class AddWordActivity : AppCompatActivity() {
             super.onPostExecute(result)
             val view = findViewById<TextView>(R.id.wordTextView)
             val imgView = findViewById<ImageView>(R.id.wordImage)
-            val t: com.squareup.picasso.Target = object : com.squareup.picasso.Target {
-                override fun onBitmapFailed(errorDrawable: Drawable?) {
-                }
-
-                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                    Log.d("GC", "CALL")
-                    this@TranslateTask.bitmap = bitmap
-                    imgView.setImageBitmap(bitmap)
-                    progressBar.visibility = View.INVISIBLE
-                }
-
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-
-                }
-
-            }
             if (!isLoadPicture) {
                 Log.d("LOAD", "NO")
-                for (item in urlList) {
-                    try {
-                        Picasso.with(this@AddWordActivity)
-                                .load(item)
-                                .transform( BitmapTransform(width, height))
-                                .skipMemoryCache()
-                                .resize(Math.ceil(Math.sqrt((width * height).toDouble())).toInt(), Math.ceil(Math.sqrt((width * height).toDouble())).toInt())
-                                .centerInside()
-                                .into(t)
-                        Log.d("LOAD", item)
-                        break
-                    } catch (ex : Exception) {
+                var counter = 0
+                Picasso.with(this@AddWordActivity)
+                        .load(urlList.get(counter))
+                        .transform( BitmapTransform(width, height))
+                        .resize(Math.ceil(Math.sqrt((width * height).toDouble())).toInt(), Math.ceil(Math.sqrt((width * height).toDouble())).toInt())
+                        .centerInside()
+                        .error(R.drawable.imagenotavailable)
+                        .into(imgView, object : com.squareup.picasso.Callback {
+                            override fun onSuccess() {
+                                this@TranslateTask.bitmap = (imgView.drawable as BitmapDrawable).bitmap
+                                progressBar.visibility = View.INVISIBLE
+                                Log.d("S", "OK")
+                            }
 
-                    }
-                }
+                            override fun onError() {
+                                isError()
+                            }
+
+                            fun isError() {
+                                if (counter < urlList.size) {
+                                    Picasso.with(this@AddWordActivity)
+                                            .load(urlList.get(counter++))
+                                            .transform( BitmapTransform(width, height))
+                                            .resize(Math.ceil(Math.sqrt((width * height).toDouble())).toInt(), Math.ceil(Math.sqrt((width * height).toDouble())).toInt())
+                                            .centerInside()
+                                            .error(R.drawable.imagenotavailable)
+                                            .into(imgView, object : com.squareup.picasso.Callback {
+                                                override fun onSuccess() {
+                                                    this@TranslateTask.bitmap = (imgView.drawable as BitmapDrawable).bitmap
+                                                    progressBar.visibility = View.INVISIBLE
+                                                    Log.d("S", "OK")
+                                                }
+
+                                                override fun onError() {
+                                                    isError()
+                                                }
+                                            })
+                                }
+                            }
+                        })
             } else {
                 Log.d("LOAD", "YES")
                 if (imageInByte != null) {
@@ -173,6 +183,7 @@ class AddWordActivity : AppCompatActivity() {
 
             }
             if (result != null && !result.ranking.isEmpty()) {
+
 
                 view.text = "$sharedText -> ${result.ranking.first { it.text != null }.translation.first { it.text != null }.text}"
                 val saveButton = findViewById<Button>(R.id.saveWord)
