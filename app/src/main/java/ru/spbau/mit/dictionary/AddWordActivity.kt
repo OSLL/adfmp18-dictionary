@@ -61,8 +61,8 @@ class BitmapTransform(private val maxWidth: Int, private val maxHeight: Int) : T
 class AddWordActivity : AppCompatActivity() {
     private val translate = Translate()
     private val bingPicture = BingPicture()
-    private var width = 350
-    private var height = 350
+    private var width = 200
+    private var height = 200
 
     init {
         translate.setKey("dict.1.1.20160306T093514Z.bbb9e3db01cef073.d0356e388174436a1f2c93cce683819103ec4579")
@@ -137,6 +137,7 @@ class AddWordActivity : AppCompatActivity() {
                 }
 
                 override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                    Log.d("GC", "CALL")
                     this@TranslateTask.bitmap = bitmap
                     imgView.setImageBitmap(bitmap)
                 }

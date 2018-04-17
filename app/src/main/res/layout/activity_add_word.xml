@@ -34,7 +34,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:src="@drawable/snake" />
+        android:src="@drawable/imagenotavailable" />
     <Button
         android:id="@+id/saveWord"
         android:text="@string/saveBtn"
