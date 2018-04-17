@@ -181,6 +181,7 @@ class AddWordActivity : AppCompatActivity() {
                     val decodeByteArray = BitmapFactory.decodeByteArray(imageInByte, 0, imageInByte!!.size)
                     imgView.setImageBitmap(decodeByteArray)
                 }
+                progressBar.visibility = View.INVISIBLE
 
             }
             if (result != null && !result.ranking.isEmpty()) {
