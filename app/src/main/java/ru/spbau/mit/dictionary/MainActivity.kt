@@ -1,26 +1,23 @@
 package ru.spbau.mit.dictionary
 
+import android.app.SearchManager
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.view.Menu
-import android.view.View
-import kotlinx.android.synthetic.main.activity_list_words.*
-import ru.spbau.mit.dictionary.main.PagerAdapter
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
-import android.app.SearchManager
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.support.v7.widget.SearchView
+import ru.spbau.mit.data.DictionaryContract
+import ru.spbau.mit.data.DictionaryProvider
+import ru.spbau.mit.dictionary.main.PagerAdapter
 import ru.spbau.mit.dictionary.main.Word
 import ru.spbau.mit.dictionary.study.StudyActivity
-import android.content.ClipboardManager.OnPrimaryClipChangedListener
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -56,19 +53,20 @@ class MainActivity : AppCompatActivity() {
         })
 
 
-        val clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-        val mPrimaryChangeListener = OnPrimaryClipChangedListener {
-            val clipBoard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val item = clipBoard.primaryClip.getItemAt(0)
-            if (item.text != null) {
-                val intent = Intent(baseContext, AddWordActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NEW_TASK)
-                intent.putExtra("word", item.text.toString())
-                baseContext.startActivity(intent)
-            }
-        }
-        clipboard.addPrimaryClipChangedListener(mPrimaryChangeListener)
+//        val clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//
+//        val mPrimaryChangeListener = OnPrimaryClipChangedListener {
+//            val clipBoard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//            val item = clipBoard.primaryClip.getItemAt(0)
+//            if (item.text != null) {
+//                val intent = Intent(baseContext, AddWordActivity::class.java)
+//                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_NEW_TASK)
+//                intent.putExtra("word", item.text.toString())
+//                baseContext.startActivity(intent)
+//            }
+//        }
+//        clipboard.addPrimaryClipChangedListener(mPrimaryChangeListener)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -112,18 +110,8 @@ class MainActivity : AppCompatActivity() {
             R.id.menuAbout -> Toast.makeText(this, "You clicked about", Toast.LENGTH_SHORT).show()
             R.id.menuSettings -> Toast.makeText(this, "You clicked settings", Toast.LENGTH_SHORT).show()
             R.id.menuTest -> {
-                // TODO ("get 10 words from database")
-                val words: ArrayList<Word> = ArrayList()
-                words.add(Word("hello", arrayListOf(getString(R.string.text))))
-                words.add(Word("name", arrayListOf(getString(R.string.text))))
-                words.add(Word("dog", arrayListOf(getString(R.string.text))))
-                words.add(Word("cat", arrayListOf(getString(R.string.text))))
-                words.add(Word("house", arrayListOf(getString(R.string.text))))
-                // ==================================
                 val intent = Intent(this, StudyActivity::class.java)
-                intent.putExtra("words", words)
                 startActivity(intent)
-                //                Toast.makeText(this, "You clicked test", Toast.LENGTH_SHORT).show()
             }
         }
         return true

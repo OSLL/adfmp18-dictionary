@@ -29,7 +29,7 @@ open class YandexTranslatorAPI {
         return wordDescription
     }
 
-    fun parseRank(def: JSONObject, rank: Rank) {
+    private fun parseRank(def: JSONObject, rank: Rank) {
         rank.text = def["text"] as String
         rank.partOfSpeech = def["pos"] as String
         rank.transcription = def["ts"] as String
@@ -42,7 +42,7 @@ open class YandexTranslatorAPI {
         }
     }
 
-    fun parseTranslation(tr: JSONObject, translation: Translation) {
+    private fun parseTranslation(tr: JSONObject, translation: Translation) {
         translation.text = tr["text"] as String?
         translation.gen = tr["gen"] as String?
         translation.partOfSpeech = tr["pos"] as String?
@@ -83,18 +83,18 @@ open class YandexTranslatorAPI {
 
     }
 
-    fun parseSynonym(syn: JSONObject, synonym: Synonym) {
-        synonym.text = syn["text"] as String?
-        synonym.gen = syn["gen"] as String?
-        synonym.partOfSpeech = syn["pos"] as String?
+    private fun parseSynonym(syn: JSONObject, synonym: Synonym) {
+        synonym.text = syn["text"] as String? ?: ""
+        synonym.gen = syn["gen"]  as String? ?: ""
+        synonym.partOfSpeech = syn["pos"] as String? ?: ""
     }
 
-    fun parseMeaning(mean: JSONObject, meaning: Meaning) {
-        meaning.text = mean["text"] as String?
+    private fun parseMeaning(mean: JSONObject, meaning: Meaning) {
+        meaning.text = mean["text"] as String
     }
 
-    fun parseExample(ex: JSONObject, example: Example) {
-        example.text = ex["text"] as String?
+    private fun parseExample(ex: JSONObject, example: Example) {
+        example.text = ex["text"] as String? ?: ""
         val tr = ex["tr"] as JSONArray
         val iterator = tr.iterator()
         while (iterator.hasNext()) {

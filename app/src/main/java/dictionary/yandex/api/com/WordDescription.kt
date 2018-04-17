@@ -1,6 +1,7 @@
 package dictionary.yandex.api.com
 
-import java.util.ArrayList
+import java.util.*
+import java.util.stream.Collectors
 
 class WordDescription {
 
@@ -97,26 +98,26 @@ class Translation {
 }
 
 class Synonym {
-    var text: String? = null
-    var partOfSpeech: String? = null
-    var gen: String? = null
+    var text: String = String()
+    var partOfSpeech: String = String()
+    var gen: String = String()
 
     override fun toString(): String {
-        return "<font color=\"blue\">" + text + "</font>" + if (gen != null) " " + gen!! else ""
+        return "<font color=\"blue\">$text</font> $gen"
     }
 }
 
 class Meaning {
-    var text: String? = null
+    var text: String = String()
 
     override fun toString(): String {
-        return text.toString()
+        return text
     }
 
 }
 
 class Example {
-    var text: String? = null
+    var text: String = String()
     val tranlations = ArrayList<String>()
 
     fun addTranslate(translate: String) {
@@ -124,11 +125,6 @@ class Example {
     }
 
     override fun toString(): String {
-        val stringBuffer = StringBuffer()
-        stringBuffer.append(text!! + " - ")
-        for (i in tranlations.indices) {
-            stringBuffer.append(tranlations[i] + if (i != tranlations.size - 1) ", " else "")
-        }
-        return stringBuffer.toString()
+        return "$text - ${tranlations.stream().collect(Collectors.joining(", "))}"
     }
 }

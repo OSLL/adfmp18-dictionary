@@ -1,30 +1,49 @@
 package ru.spbau.mit.dictionary.main
 
+import android.database.Cursor
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.ViewGroup
+import android.support.v4.app.LoaderManager
+import android.support.v4.content.CursorLoader
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ListView
+import ru.spbau.mit.adapters.WordsCursorAdapter
+import ru.spbau.mit.data.DictionaryContract
+import ru.spbau.mit.data.DictionaryProvider
 import ru.spbau.mit.dictionary.R
 
-class TabStudy : Fragment() {
+class TabStudy : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
+    companion object {
+        private val WORDS_LOADER = 0
+    }
+
+    private lateinit var cursorAdapter: WordsCursorAdapter
+
+    override fun onLoadFinished(loader: android.support.v4.content.Loader<Cursor>?, data: Cursor?) {
+        cursorAdapter.swapCursor(data)
+    }
+
+    override fun onCreateLoader(id: Int, args: Bundle?): android.support.v4.content.Loader<Cursor> {
+        return CursorLoader(this.context,
+                DictionaryProvider.CONTENT_WORDS_ENTRY,
+                arrayOf(DictionaryContract.WordsEntry._ID, DictionaryContract.WordsEntry.COLUMN_NAME),
+                "${DictionaryContract.WordsEntry.COLUMN_HIDDEN} = 0 AND ${DictionaryContract.WordsEntry.COLUMN_STATE} = ${DictionaryContract.WordsEntry.STATE_ON_LEARNING}",
+                null,
+                null)
+    }
+
+    override fun onLoaderReset(loader: android.support.v4.content.Loader<Cursor>?) {
+        cursorAdapter.swapCursor(null)
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootViewer = inflater!!.inflate(R.layout.tab_study, container, false)
         val listView = rootViewer.findViewById<ListView>(R.id.list_view)
-        val adapter = DictAdapter(activity, getWords())
-        listView.adapter = adapter
+        cursorAdapter = WordsCursorAdapter(context, null, DictionaryContract.WordsEntry.STATE_ON_LEARNING)
+        listView.adapter = cursorAdapter
+        loaderManager.initLoader(WORDS_LOADER, null, this)
         return rootViewer
-    }
-
-    private fun getWords(): ArrayList<Word> {
-        // TODO("get words from database")
-        val wordList = ArrayList<Word>()
-        wordList.add(Word("house", arrayListOf("")))
-        wordList.add(Word("cat", arrayListOf("")))
-        wordList.add(Word("dog", arrayListOf("")))
-        wordList.add(Word("car", arrayListOf("")))
-        return wordList
     }
 }

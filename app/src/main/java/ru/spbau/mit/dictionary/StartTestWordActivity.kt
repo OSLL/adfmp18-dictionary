@@ -1,8 +1,8 @@
 package ru.spbau.mit.dictionary
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.widget.Button
 
 class StartTestWordActivity : AppCompatActivity() {
@@ -12,7 +12,7 @@ class StartTestWordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start_test_word)
         startTest = findViewById(R.id.start_test)
-        startTest.setOnClickListener{
+        startTest.setOnClickListener {
             startTestWordActivity()
         }
     }

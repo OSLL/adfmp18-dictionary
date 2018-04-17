@@ -12,8 +12,11 @@ class DictionaryProvider : ContentProvider() {
     companion object {
         private const val WORDS = 1
         private const val WORD_ID = 2
+        private const val RELATION = 3
         val AUTHORITY = "ru.spbau.mit"
-        val CONTENT_URI = Uri.withAppendedPath(Uri.parse("content://$AUTHORITY"), DictionaryContract.WordsEntry.TABLE_NAME)
+        val CONTENT_WORDS_ENTRY: Uri = Uri.withAppendedPath(Uri.parse("content://$AUTHORITY"), DictionaryContract.WordsEntry.TABLE_NAME)
+        val CONTENT_WORDS_RELATION: Uri = Uri.withAppendedPath(Uri.parse("content://$AUTHORITY"), DictionaryContract.WordsRelation.TABLE_NAME)
+
     }
 
     private val sURIMatcher = UriMatcher(UriMatcher.NO_MATCH)
@@ -21,6 +24,7 @@ class DictionaryProvider : ContentProvider() {
     init {
         sURIMatcher.addURI(AUTHORITY, DictionaryContract.WordsEntry.TABLE_NAME, WORDS)
         sURIMatcher.addURI(AUTHORITY, "${DictionaryContract.WordsEntry.TABLE_NAME}/#", WORD_ID)
+        sURIMatcher.addURI(AUTHORITY, DictionaryContract.WordsRelation.TABLE_NAME, RELATION)
     }
 
     override fun insert(uri: Uri?, values: ContentValues?): Uri {
@@ -33,6 +37,15 @@ class DictionaryProvider : ContentProvider() {
                 values.getAsInteger(DictionaryContract.WordsEntry.COLUMN_STATE) ?: throw IllegalArgumentException("Words requires valid state")
                 val database = dbHelper!!.writableDatabase
                 val id = database.insert(DictionaryContract.WordsEntry.TABLE_NAME, null, values)
+                context.contentResolver.notifyChange(uri, null)
+                ContentUris.withAppendedId(uri, id)
+            }
+            RELATION -> {
+                values?.getAsInteger(DictionaryContract.WordsRelation.COLUMN_FROM) ?: throw IllegalArgumentException("Relation from is invalid")
+                values.getAsInteger(DictionaryContract.WordsRelation.COLUMN_TO) ?: throw IllegalArgumentException("Relation from is invalid")
+                val database = dbHelper!!.writableDatabase
+                val id = database.insert(DictionaryContract.WordsRelation.TABLE_NAME, null, values)
+                context.contentResolver.notifyChange(uri, null)
                 ContentUris.withAppendedId(uri, id)
             }
             else -> throw IllegalArgumentException("Insert is not supported for $uri")
@@ -49,6 +62,7 @@ class DictionaryProvider : ContentProvider() {
                 val selectionArgs = Array<String>(1) { valueOf(ContentUris.parseId(uri)) }
                 database.query(DictionaryContract.WordsEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder)
             }
+            RELATION -> database.query(DictionaryContract.WordsRelation.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder)
             else -> throw IllegalArgumentException("Cannot query unknown URI $uri")
         }
         cursor.setNotificationUri(context.contentResolver, uri)
@@ -61,18 +75,33 @@ class DictionaryProvider : ContentProvider() {
     }
 
     override fun update(uri: Uri?, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
-        TODO("not implemented")
+        val match = sURIMatcher.match(uri)
+        return when (match) {
+            WORDS -> {
+                val database = dbHelper!!.writableDatabase
+                val r = database.update(DictionaryContract.WordsEntry.TABLE_NAME, values, selection, selectionArgs)
+                context.contentResolver.notifyChange(uri, null)
+                r
+            }
+            else -> throw IllegalArgumentException("Cannot query unknown URI $uri")
+        }
     }
 
     override fun delete(uri: Uri?, selection: String?, selectionArgs: Array<out String>?): Int {
         val database = dbHelper!!.writableDatabase
         val match = sURIMatcher.match(uri)
         return when (match) {
-            WORDS -> database.delete(DictionaryContract.WordsEntry.TABLE_NAME, selection, selectionArgs)
+            WORDS -> {
+                val r = database.delete(DictionaryContract.WordsEntry.TABLE_NAME, selection, selectionArgs)
+                context.contentResolver.notifyChange(uri, null)
+                r
+            }
             WORD_ID -> {
                 val selection = DictionaryContract.WordsEntry._ID + "=?";
                 val selectionArgs = Array<String>(1) { valueOf(ContentUris.parseId(uri)) }
-                database.delete(DictionaryContract.WordsEntry.TABLE_NAME, selection, selectionArgs)
+                val r = database.delete(DictionaryContract.WordsEntry.TABLE_NAME, selection, selectionArgs)
+                context.contentResolver.notifyChange(uri, null)
+                r
             }
             else -> throw IllegalArgumentException("Deletion is not supported for $uri");
         }
@@ -83,6 +112,7 @@ class DictionaryProvider : ContentProvider() {
         return when (match) {
             WORDS -> ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + DictionaryContract.WordsEntry.TABLE_NAME
             WORD_ID -> ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + AUTHORITY + "/" + DictionaryContract.WordsEntry.TABLE_NAME
+            RELATION -> ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + AUTHORITY + "/" + DictionaryContract.WordsRelation.TABLE_NAME
             else -> throw IllegalStateException("Unknown URI $uri with match $match")
         }
     }

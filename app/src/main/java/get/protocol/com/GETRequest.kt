@@ -2,21 +2,12 @@ package get.protocol.com
 
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
-import java.util.Enumeration
-import java.util.Hashtable
-
+import java.util.*
 import javax.net.ssl.HttpsURLConnection
 
 class GETRequest(private val url: String, private val encoding: String) {
-    private var TIME_OUT = 5000
-
-    constructor(url: String, encoding: String, time_out: Int) : this(url, encoding) {
-        TIME_OUT = time_out
-    }
-
 
     @Throws(Exception::class)
     @JvmOverloads
@@ -36,8 +27,8 @@ class GETRequest(private val url: String, private val encoding: String) {
 
         val urlObject = URL(url)
         val connection = urlObject.openConnection() as HttpsURLConnection
-        connection.connectTimeout = TIME_OUT
-        connection.readTimeout = TIME_OUT
+        connection.connectTimeout = Companion.TIME_OUT
+        connection.readTimeout = Companion.TIME_OUT
         connection.setRequestProperty("Content-Type", "text/plain; charset=" + encoding)
         connection.setRequestProperty("Accept-Charset", encoding)
 
@@ -54,5 +45,9 @@ class GETRequest(private val url: String, private val encoding: String) {
         BufferedReader(InputStreamReader(connection.inputStream)).use {
             return it.readText()
         }
+    }
+
+    companion object {
+        private var TIME_OUT = 5000
     }
 }
