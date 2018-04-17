@@ -58,7 +58,7 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp">
 
@@ -74,7 +74,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="5dp"
             android:background="@android:color/black" />
 
         <uk.co.deanwild.flowtextview.FlowTextView
@@ -84,15 +84,12 @@
 
             <ImageView
                 android:id="@+id/img"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="false"
+                android:layout_width="200dp"
+                android:layout_height="150dp"
+                android:layout_alignParentEnd="false"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentStart="false"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="false"
-                android:layout_marginBottom="200dp"
-                android:layout_marginStart="150dp"
                 android:src="@drawable/imagenotavailable" />
 
         </uk.co.deanwild.flowtextview.FlowTextView>

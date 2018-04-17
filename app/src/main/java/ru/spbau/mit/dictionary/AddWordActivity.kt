@@ -119,8 +119,9 @@ class AddWordActivity : AppCompatActivity() {
             if (!isLoadPicture)
                 urlList = bingPicture.execute(sharedText, 10).contentUrlList
             return try {
-                translate.execute(sharedText, Language.ENGLISH, Language.RUSSIAN)
-
+                val temp = translate.execute(sharedText, Language.ENGLISH, Language.RUSSIAN)
+                Log.d("temp", temp.toString())
+                temp
             } catch (e: Exception) {
                 null
             }

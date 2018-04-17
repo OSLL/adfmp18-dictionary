@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -45,6 +46,16 @@ class StudyActivity : AppCompatActivity() {
         wordView = findViewById<TextView>(R.id.wordView)
         flowTextView = findViewById<FlowTextView>(R.id.ftv)
         imageView = flowTextView.findViewById<ImageView>(R.id.img)
+        // display dimensions
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val height = displayMetrics.heightPixels
+        val width = displayMetrics.widthPixels
+
+        val params = imageView.layoutParams
+        params.width = width / 2
+        params.height = height / 3
+        imageView.layoutParams = params
         val selection = "${DictionaryContract.WordsEntry.COLUMN_HIDDEN} = 0 AND ${DictionaryContract.WordsEntry.COLUMN_STATE} = ${DictionaryContract.WordsEntry.STATE_ON_LEARNING}"
         val words = getWords(10, selection)
         for (word in words) {

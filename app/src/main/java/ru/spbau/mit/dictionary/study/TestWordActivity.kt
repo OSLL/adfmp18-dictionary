@@ -16,8 +16,7 @@ import ru.spbau.mit.data.DictionaryContract
 import ru.spbau.mit.data.DictionaryProvider
 import ru.spbau.mit.dictionary.MainActivity
 import android.content.Intent
-
-
+import android.util.DisplayMetrics
 
 
 class TestWordActivity : AppCompatActivity() {
@@ -49,6 +48,14 @@ class TestWordActivity : AppCompatActivity() {
         words.forEach { answers.add(false) }
         wordView = findViewById(R.id.wordView)
         imageView = findViewById(R.id.imageView)
+        // display dimensions
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val height = displayMetrics.heightPixels
+        val params = imageView.layoutParams
+        params.height = height / 3
+        imageView.layoutParams = params
+
         answerView = findViewById(R.id.editText)
         answerView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
