@@ -13,48 +13,31 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import dictionary.yandex.api.com.Language
 import dictionary.yandex.api.com.Translate
 import dictionary.yandex.api.com.WordDescription
 import picture.bing.api.com.BingPicture
-import picture.bing.api.com.PictureDescription
 import picture.bing.api.com.PicturesDescription
 import ru.spbau.mit.data.DictionaryContract
 import ru.spbau.mit.data.DictionaryProvider
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Point
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.Log
-import com.squareup.picasso.Target
-import ru.spbau.mit.dictionary.R.string.from
 import java.io.ByteArrayOutputStream
-
-import java.lang.Thread.sleep
-import java.util.concurrent.locks.Condition
-import java.util.concurrent.locks.Lock
-import java.util.concurrent.locks.ReentrantLock
 
 
 class AddWordActivity : AppCompatActivity() {
     private val translate = Translate()
     private val bingPicture = BingPicture()
-    private var width = 400
-    private var height = 400
+    private var width = 350
+    private var height = 350
     private var imageInByte : ByteArray? = null
 
     init {
-//        val defaultDisplay = windowManager.defaultDisplay
-//        var p = Point()
-//        defaultDisplay.getSize(p)
-//        width = p.x
-//        height = p.y / 3
         translate.setKey("dict.1.1.20160306T093514Z.bbb9e3db01cef073.d0356e388174436a1f2c93cce683819103ec4579")
         bingPicture.setKey("e48b80a0cf264666a40eb3896e27dfbf")
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,8 +49,6 @@ class AddWordActivity : AppCompatActivity() {
 
         val saveButton = findViewById<Button>(R.id.saveWord)
         saveButton.visibility = View.INVISIBLE
-
-
         if (Intent.ACTION_SEND == action && type != null) {
             if ("text/plain" == type) {
                 handleSendText(intent)
@@ -101,6 +82,8 @@ class AddWordActivity : AppCompatActivity() {
             Picasso.with(this@AddWordActivity)
                     .load(urlList[0])
                     .resize(width, height)
+                    .fit()
+                    .centerCrop()
                     .into(imgView)
         }
     }
@@ -164,6 +147,8 @@ class AddWordActivity : AppCompatActivity() {
                 Picasso.with(this@AddWordActivity)
                         .load(urlList[0])
                         .resize(width, height)
+                        .fit()
+                        .centerCrop()
                         .into(t)
             }
             else {

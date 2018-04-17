@@ -24,14 +24,16 @@
 
     <TextView
         android:id="@+id/wordTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="32sp"/>
 
     <ImageView
         android:id="@+id/wordImage"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:src="@drawable/snake" />
     <Button
         android:id="@+id/saveWord"
