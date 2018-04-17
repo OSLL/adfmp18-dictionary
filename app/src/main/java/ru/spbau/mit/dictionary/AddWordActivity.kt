@@ -169,12 +169,15 @@ class AddWordActivity : AppCompatActivity() {
                     val decodeByteArray = BitmapFactory.decodeByteArray(imageInByte, 0, imageInByte!!.size)
                     imgView.setImageBitmap(decodeByteArray)
                 }
+
             }
             if (result != null && !result.ranking.isEmpty()) {
 
                 view.text = "$sharedText -> ${result.ranking.first { it.text != null }.translation.first { it.text != null }.text}"
                 val saveButton = findViewById<Button>(R.id.saveWord)
-                saveButton.visibility = View.VISIBLE
+                if (!isLoadPicture) {
+                    saveButton.visibility = View.VISIBLE
+                }
                 saveButton.setOnClickListener {
                     val values = ContentValues()
                     values.put(DictionaryContract.WordsEntry.COLUMN_NAME, sharedText)
@@ -243,6 +246,7 @@ class AddWordActivity : AppCompatActivity() {
                             }
                         }
                     }
+                    finish()
                 }
             } else {
                 view.text = "Problem with translation"
