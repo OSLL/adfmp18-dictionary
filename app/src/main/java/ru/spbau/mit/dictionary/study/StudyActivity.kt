@@ -9,8 +9,6 @@ import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import ru.spbau.mit.dictionary.StartTestWordActivity
-import kotlinx.android.synthetic.main.activity_study.*
 import ru.spbau.mit.data.DictionaryContract
 import ru.spbau.mit.data.DictionaryProvider
 import ru.spbau.mit.dictionary.R
@@ -68,6 +66,7 @@ class StudyActivity : AppCompatActivity() {
         nextButton.setOnClickListener {
             if (current == words.size - 1) {
                 val intent = Intent(this, StartTestWordActivity::class.java)
+                intent.putExtra(getString(R.string.words), words)
                 startActivity(intent)
             } else {
                 show(words[++current])

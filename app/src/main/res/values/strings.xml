@@ -22,8 +22,9 @@
             ;smd;ams;dmalsdkmkamsdlkmlnajsdnjlasdasjdbhakdksjdnlasdnslkdma;sdm;asmld;amls;dlma
             ;smd;ams;dmalsdkmkamsdlkmlnajsdnjlasdasjdbhakdksjdnlasdnslkdma;sdm;asmld;amls;dlma
             ;smd;ams;dmalsdkmkamsdlkmlnajsdnjlasd"</string>
-    <string name="words">"words"</string>
     <string name="title_activity_start_test_word">Test words</string>
     <string name="remove">Удалить</string>
     <string name="to_learned">В изученое</string>
+    <string name="words">words</string>
+    <string name="answers">\"answers\"</string>
 </resources>

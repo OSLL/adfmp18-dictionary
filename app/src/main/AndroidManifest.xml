@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".StartTestWordActivity"
+        <activity android:name=".study.StartTestWordActivity"
             android:label="@string/title_activity_start_test_word"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
@@ -46,7 +46,23 @@
             </intent-filter>
             -->
         </activity>
+        <activity
+            android:name=".study.TestWordActivity"
+            android:parentActivityName=".study.StartTestWordActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
 
+        <activity
+            android:name=".study.TestEndActivity"
+            android:parentActivityName=".study.TestWordActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
 
         <activity
             android:name=".AddWordActivity"
