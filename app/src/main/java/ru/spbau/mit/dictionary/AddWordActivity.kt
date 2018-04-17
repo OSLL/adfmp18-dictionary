@@ -129,7 +129,6 @@ class AddWordActivity : AppCompatActivity() {
         @SuppressLint("SetTextI18n")
         override fun onPostExecute(result: WordDescription?) {
             super.onPostExecute(result)
-            progressBar.visibility = View.INVISIBLE
             val view = findViewById<TextView>(R.id.wordTextView)
             val imgView = findViewById<ImageView>(R.id.wordImage)
             val t: com.squareup.picasso.Target = object : com.squareup.picasso.Target {
@@ -140,6 +139,7 @@ class AddWordActivity : AppCompatActivity() {
                     Log.d("GC", "CALL")
                     this@TranslateTask.bitmap = bitmap
                     imgView.setImageBitmap(bitmap)
+                    progressBar.visibility = View.INVISIBLE
                 }
 
                 override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
