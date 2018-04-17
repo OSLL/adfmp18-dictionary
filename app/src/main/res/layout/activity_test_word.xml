@@ -1,46 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="ru.spbau.mit.dictionary.TestWordActivity">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar4"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="130dp"
-        android:text="Button"
-        tools:text="Next" />
+        android:layout_gravity="center_horizontal"
+        android:background="?android:attr/colorPrimary"
+        android:gravity="center"
+        android:minHeight="?android:attr/actionBarSize"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:theme="?android:attr/actionBarTheme">
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <!--<ImageButton-->
+            <!--android:id="@+id/button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:background="?android:attr/selectableItemBackground"-->
+            <!--android:drawableStart="@drawable/left" />-->
+
+            <ImageButton
+                android:id="@+id/prev"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentStart="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="false"
+                android:scaleType="fitCenter"
+                android:src="@drawable/prev" />
+
+            <ImageButton
+                android:id="@+id/next"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentEnd="true"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/next" />
+        </RelativeLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="17dp"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:orientation="vertical"
+        android:padding="20dp">
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/editText2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="22dp"
-        android:text="TextView" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="33dp"
+            app:srcCompat="@mipmap/ic_launcher" />
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_above="@+id/textView3"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="39dp"
-        app:srcCompat="@mipmap/ic_launcher" />
-</RelativeLayout>
+        <TextView
+            android:id="@+id/wordView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_horizontal|center"
+            android:text="TextView"
+            android:textIsSelectable="true"
+            android:textSize="28sp" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:ems="10"
+            android:gravity="center_horizontal|center"
+            android:inputType="textPersonName" />
+
+
+        <Button
+            android:id="@+id/checkButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="84dp"
+            android:text="Check" />
+
+    </LinearLayout>
+</LinearLayout>

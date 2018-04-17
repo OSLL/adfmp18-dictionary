@@ -1,9 +1,10 @@
-package ru.spbau.mit.dictionary
+package ru.spbau.mit.dictionary.study
 
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
+import ru.spbau.mit.dictionary.R
 
 class StartTestWordActivity : AppCompatActivity() {
     private lateinit var startTest: Button
@@ -19,6 +20,7 @@ class StartTestWordActivity : AppCompatActivity() {
 
     private fun startTestWordActivity() {
         val intent = Intent(this, TestWordActivity::class.java)
+        intent.putExtra(getString(R.string.words), this.intent.getSerializableExtra(getString(R.string.words)))
         startActivity(intent)
     }
 }
