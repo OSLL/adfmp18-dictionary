@@ -56,7 +56,6 @@ class StudyActivity : AppCompatActivity() {
         }
         if (words.isNotEmpty()) {
             setContentView(R.layout.activity_study)
-            show(words[0])
             wordView = findViewById<TextView>(R.id.wordView)
             flowTextView = findViewById<FlowTextView>(R.id.ftv)
             imageView = flowTextView.findViewById<ImageView>(R.id.img)
@@ -71,7 +70,7 @@ class StudyActivity : AppCompatActivity() {
             params.height = height / 3
             imageView.layoutParams = params
 
-
+            show(words[0])
             val nextButton = findViewById<ImageButton>(R.id.next)
             val prevButton = findViewById<ImageButton>(R.id.prev)
             prevButton.isEnabled = false
