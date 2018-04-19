@@ -117,9 +117,9 @@ class AddWordActivity : AppCompatActivity() {
         }
 
         override fun doInBackground(vararg params: Void): WordDescription? {
-            if (!isLoadPicture)
-                urlList = bingPicture.execute(sharedText, 10).contentUrlList
             return try {
+                if (!isLoadPicture)
+                    urlList = bingPicture.execute(sharedText, 10).contentUrlList
                 val temp = translate.execute(sharedText, Language.ENGLISH, Language.RUSSIAN)
                 Log.d("temp", temp.toString())
                 temp
@@ -263,7 +263,9 @@ class AddWordActivity : AppCompatActivity() {
                     finish()
                 }
             } else {
+                progressBar.visibility = View.INVISIBLE
                 view.text = "Problem with translation"
+                imgView.visibility = View.INVISIBLE
             }
         }
     }
