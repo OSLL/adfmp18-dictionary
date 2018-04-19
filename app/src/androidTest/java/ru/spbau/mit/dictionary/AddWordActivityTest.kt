@@ -9,13 +9,18 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import android.support.test.InstrumentationRegistry
+import android.support.test.espresso.Espresso.onData
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.assertion.ViewAssertions.*
+import android.support.test.espresso.matcher.CursorMatchers
 import android.support.test.espresso.matcher.ViewMatchers.withText
+import android.view.View
 import android.widget.ListView
+import org.hamcrest.Matchers.anything
 import org.hamcrest.Matchers.containsString
+import ru.spbau.mit.dictionary.main.TabStudy
 
 
 @RunWith(AndroidJUnit4::class)
@@ -68,7 +73,8 @@ public class AddWordActivityTest {
 
         val mainIntent = getIntent(MainActivity::class.java)
         mainActivity.launchActivity(null)
-        onView(withId(R.id.list_view)).check(matches(withText(containsString("word"))))
+        onData(anything()).inAdapterView(withId(R.id.list_view)).atPosition(0).inAdapterView(withId(R.id.list_view))
+//        onView(withId(R.id.list_view)).check(matches(withText(containsString("word"))))
 
     }
 }

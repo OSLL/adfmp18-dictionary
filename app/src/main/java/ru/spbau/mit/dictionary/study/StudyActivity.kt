@@ -41,21 +41,7 @@ class StudyActivity : AppCompatActivity() {
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_study)
 
-        wordView = findViewById<TextView>(R.id.wordView)
-        flowTextView = findViewById<FlowTextView>(R.id.ftv)
-        imageView = flowTextView.findViewById<ImageView>(R.id.img)
-        // display dimensions
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val height = displayMetrics.heightPixels
-        val width = displayMetrics.widthPixels
-
-        val params = imageView.layoutParams
-        params.width = width / 2
-        params.height = height / 3
-        imageView.layoutParams = params
         val selection = "${DictionaryContract.WordsEntry.COLUMN_HIDDEN} = 0 AND ${DictionaryContract.WordsEntry.COLUMN_STATE} = ${DictionaryContract.WordsEntry.STATE_ON_LEARNING}"
         val words = getWords(10, selection)
         for (word in words) {
@@ -69,31 +55,52 @@ class StudyActivity : AppCompatActivity() {
             word.translates = wordTranslates
         }
         if (words.isNotEmpty()) {
+            setContentView(R.layout.activity_study)
             show(words[0])
-        }
+            wordView = findViewById<TextView>(R.id.wordView)
+            flowTextView = findViewById<FlowTextView>(R.id.ftv)
+            imageView = flowTextView.findViewById<ImageView>(R.id.img)
+            // display dimensions
+            val displayMetrics = DisplayMetrics()
+            windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val height = displayMetrics.heightPixels
+            val width = displayMetrics.widthPixels
 
-        val nextButton = findViewById<ImageButton>(R.id.next)
-        val prevButton = findViewById<ImageButton>(R.id.prev)
-        prevButton.isEnabled = false
+            val params = imageView.layoutParams
+            params.width = width / 2
+            params.height = height / 3
+            imageView.layoutParams = params
 
-        nextButton.setOnClickListener {
-            if (current == words.size - 1) {
-                val intent = Intent(this, StartTestWordActivity::class.java)
-                intent.putExtra(getString(R.string.words), words)
-                startActivity(intent)
-            } else {
-                show(words[++current])
-                prevButton.isEnabled = true
+
+            val nextButton = findViewById<ImageButton>(R.id.next)
+            val prevButton = findViewById<ImageButton>(R.id.prev)
+            prevButton.isEnabled = false
+
+            nextButton.setOnClickListener {
+                if (current == words.size - 1) {
+                    val intent = Intent(this, StartTestWordActivity::class.java)
+                    intent.putExtra(getString(R.string.words), words)
+                    startActivity(intent)
+                } else {
+                    show(words[++current])
+                    prevButton.isEnabled = true
+                }
+
             }
 
-        }
-
-        prevButton.setOnClickListener {
-            show(words[--current])
-            nextButton.isEnabled = true
-            if (current == 0) {
-                Log.d("prev", "clickable = false")
-                it.isEnabled = false
+            prevButton.setOnClickListener {
+                show(words[--current])
+                nextButton.isEnabled = true
+                if (current == 0) {
+                    Log.d("prev", "clickable = false")
+                    it.isEnabled = false
+                }
+            }
+        } else {
+            setContentView(R.layout.activity_nothing_to_study)
+            val prevButton = findViewById<ImageButton>(R.id.prev)
+            prevButton.setOnClickListener {
+                this@StudyActivity.finish()
             }
         }
     }
