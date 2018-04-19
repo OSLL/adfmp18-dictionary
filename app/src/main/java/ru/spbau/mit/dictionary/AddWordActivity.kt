@@ -97,7 +97,7 @@ class AddWordActivity : AppCompatActivity() {
     @SuppressLint("StaticFieldLeak")
     internal inner class TranslateTask(private val sharedText: String) : AsyncTask<Void, Void?, WordDescription?>() {
         private val progressBar = findViewById<ProgressBar>(R.id.progressbar)
-        private lateinit var urlList: List<String>
+        private var urlList: List<String>? = null
         private var imageInByte: ByteArray? = null
         private var bitmap: Bitmap? = null
         private var isLoadPicture: Boolean = false
@@ -133,11 +133,11 @@ class AddWordActivity : AppCompatActivity() {
             super.onPostExecute(result)
             val view = findViewById<TextView>(R.id.wordTextView)
             val imgView = findViewById<ImageView>(R.id.wordImage)
-            if (!isLoadPicture) {
+            if (!isLoadPicture && urlList != null) {
                 Log.d("LOAD", "NO")
                 var counter = 0
                 Picasso.with(this@AddWordActivity)
-                        .load(urlList.get(counter))
+                        .load(urlList!![counter])
                         .transform( BitmapTransform(width, height))
                         .resize(Math.ceil(Math.sqrt((width * height).toDouble())).toInt(), Math.ceil(Math.sqrt((width * height).toDouble())).toInt())
                         .centerInside()
@@ -154,9 +154,9 @@ class AddWordActivity : AppCompatActivity() {
                             }
 
                             fun isError() {
-                                if (counter < urlList.size) {
+                                if (counter < urlList!!.size) {
                                     Picasso.with(this@AddWordActivity)
-                                            .load(urlList.get(counter++))
+                                            .load(urlList!!.get(counter++))
                                             .transform( BitmapTransform(width, height))
                                             .resize(Math.ceil(Math.sqrt((width * height).toDouble())).toInt(), Math.ceil(Math.sqrt((width * height).toDouble())).toInt())
                                             .centerInside()
