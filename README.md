@@ -9,10 +9,20 @@ Maket: https://ninjamock.com/s/BRSFQRx
 
 ### Performance words list
 
-![1](https://github.com/OSLL/adfmp18-dictionary/blob/master/perf_1.png)
-![1001](https://github.com/OSLL/adfmp18-dictionary/blob/master/perf_1000.png)
-![10001](https://github.com/OSLL/adfmp18-dictionary/blob/master/perf_10000.png)
-![100001](https://github.com/OSLL/adfmp18-dictionary/blob/master/perf_100000.png)
+1.5% 12.3 Mb
+![0](https://github.com/OSLL/adfmp18-dictionary/blob/master/0.png)
+
+3.3% 15 Mb
+![11](https://github.com/OSLL/adfmp18-dictionary/blob/master/11.png)
+
+17% 15 Mb
+![1000](https://github.com/OSLL/adfmp18-dictionary/blob/master/1000.png)
+
+16% 16 Mb
+![10000](https://github.com/OSLL/adfmp18-dictionary/blob/master/10000.png)
+
+13.2% 20.9 Mb
+![100000](https://github.com/OSLL/adfmp18-dictionary/blob/master/100000.png)
 
 We conclude that the performance is independent of the number of elements
 
