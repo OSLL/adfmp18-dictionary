@@ -103,6 +103,13 @@ class DictionaryProvider : ContentProvider() {
                 context.contentResolver.notifyChange(uri, null)
                 r
             }
+            RELATION -> {
+//                val selection = DictionaryContract.WordsRelation._ID + "=?"
+//                val selectionArgs = Array<String>(1) { valueOf(ContentUris.parseId(uri)) }
+                val r = database.delete(DictionaryContract.WordsRelation.TABLE_NAME, null, null)
+                context.contentResolver.notifyChange(uri, null)
+                r
+            }
             else -> throw IllegalArgumentException("Deletion is not supported for $uri");
         }
     }

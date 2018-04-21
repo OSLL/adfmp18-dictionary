@@ -41,7 +41,7 @@ class TabStudied : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootViewer = inflater!!.inflate(R.layout.tab_study, container, false)
-        val listView = rootViewer.findViewById<ListView>(R.id.list_view)
+        val listView = rootViewer.findViewById<ListView>(R.id.list_view_words)
         cursorAdapter = WordsCursorAdapter(context, null, DictionaryContract.WordsEntry.STATE_STUDIED)
         listView.adapter = cursorAdapter
         loaderManager.initLoader(WORDS_LOADER, null, this)
