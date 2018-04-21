@@ -10,6 +10,7 @@ import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.matcher.IntentMatchers
+import android.support.test.espresso.intent.rule.IntentsTestRule
 import android.support.test.espresso.matcher.CursorMatchers.withRowString
 import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.espresso.matcher.ViewMatchers.*
@@ -48,9 +49,21 @@ class MainActivityTest {
      */
     @Test
     public fun testMenuTest() {
+        val intent = getIntent(AddWordActivity::class.java)
+        intent.action = Intent.ACTION_SEND
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, "sun")
+        addWordActivity.launchActivity(intent)
+        onView(withId(R.id.saveWord)).perform(click())
+        addWordActivity.activity.finish()
+
+        mainActivity.launchActivity(null)
+        Intents.init()
         Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
         onView(ViewMatchers.withText("Тест")).perform(click())
         Intents.intended(IntentMatchers.hasComponent(StudyActivity::class.java.name))
+        Intents.release()
+        mainActivity.finishActivity()
     }
 
     @Test
