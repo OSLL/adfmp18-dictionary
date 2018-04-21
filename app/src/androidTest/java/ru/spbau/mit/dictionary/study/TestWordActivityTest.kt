@@ -1,22 +1,19 @@
 package ru.spbau.mit.dictionary.study
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.support.test.InstrumentationRegistry
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.Espresso.onView
-import android.support.test.espresso.action.ViewActions.click
+import android.support.test.espresso.action.ViewActions
+import android.support.test.espresso.action.ViewActions.*
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.intent.Intents
-import android.support.test.espresso.intent.matcher.IntentMatchers
-import android.support.test.espresso.intent.rule.IntentsTestRule
 import android.support.test.espresso.matcher.ViewMatchers
+import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.rule.ActivityTestRule
-import android.view.View
-import android.widget.TextView
-import org.hamcrest.BaseMatcher
-import org.hamcrest.Description
-import org.hamcrest.Matchers.*
+import junit.framework.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -24,10 +21,11 @@ import ru.spbau.mit.data.DictionaryProvider
 import ru.spbau.mit.dictionary.AddWordActivity
 import ru.spbau.mit.dictionary.R
 
-class StudyActivityTest {
+class TestWordActivityTest {
+
     @get:Rule
-    public val studyActivity: IntentsTestRule<StudyActivity> =
-            IntentsTestRule<StudyActivity>(StudyActivity::class.java, false, false)
+    public val testActivity: ActivityTestRule<TestWordActivity> =
+            ActivityTestRule<TestWordActivity>(TestWordActivity::class.java, false, false)
 
     @get:Rule
     public val addWordActivity: ActivityTestRule<AddWordActivity> =
@@ -49,43 +47,40 @@ class StudyActivityTest {
         InstrumentationRegistry.getContext().contentResolver.delete(DictionaryProvider.CONTENT_WORDS_RELATION, null, null)
     }
 
+    /*
+    if we answer correct, the background color of edittext changed to GREEN
+     */
     @Test
-    public fun testLearnActivity() {
+    public fun testCorrectAnswer() {
         addWordActivity.launchActivity(null)
-        Espresso.onView(ViewMatchers.withId(R.id.saveWord)).perform(click())
+        Espresso.onView(ViewMatchers.withId(R.id.saveWord)).perform(ViewActions.click())
         addWordActivity.finishActivity()
 
-        studyActivity.launchActivity(null)
-        onView(allOf(withId(R.id.wordView), `is`(instanceOf(TextView::class.java))))
-                .check(matches(matchWithText("cat")))
-    }
-
-    @Test
-    public fun testStartedActivity() {
-        addWordActivity.launchActivity(null)
-        onView(withId(R.id.saveWord)).perform(click())
-        addWordActivity.finishActivity()
-
-        studyActivity.launchActivity(null)
-        onView(withId(R.id.next)).perform(click())
-
-        Intents.intended(IntentMatchers.hasComponent(StartTestWordActivity::class.java.name))
-
-    }
-
-    private fun matchWithText(text: String): BaseMatcher<View> {
-        return object : BaseMatcher<View>() {
-            override fun describeTo(description: Description?) {
-                description!!.appendText("TextView with text = $text")
-            }
-
-            override fun matches(item: Any?): Boolean {
-                if (item is TextView) {
-                    return item.text.toString().contains(text)
-                }
-                return false
-            }
+        testActivity.launchActivity(null)
+        onView(withId(R.id.editText)).perform(replaceText("кошка"))
+        onView(withId(R.id.checkButton)).perform(click())
+        onView(withId(R.id.editText)).check { view, _ ->
+            Assert.assertEquals(Color.GREEN, (view.background as ColorDrawable).color)
         }
+        testActivity.finishActivity()
     }
 
+
+    /*
+    if we answer incorrect, the background color of edittext changed to RED
+     */
+    @Test
+    public fun testIncorrectAnswer() {
+        addWordActivity.launchActivity(null)
+        Espresso.onView(ViewMatchers.withId(R.id.saveWord)).perform(ViewActions.click())
+        addWordActivity.finishActivity()
+
+        testActivity.launchActivity(null)
+        onView(withId(R.id.editText)).perform(replaceText("неправильно"))
+        onView(withId(R.id.checkButton)).check(matches(isDisplayed())).perform(click())
+        onView(withId(R.id.editText)).check { view, _ ->
+            Assert.assertEquals(Color.RED, (view.background as ColorDrawable).color)
+        }
+        testActivity.finishActivity()
+    }
 }

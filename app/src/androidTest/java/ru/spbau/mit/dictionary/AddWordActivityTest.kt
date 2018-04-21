@@ -15,8 +15,6 @@ import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.*
 import android.support.test.espresso.matcher.CursorMatchers.withRowString
 import android.support.test.espresso.matcher.ViewMatchers.*
-import android.view.View
-import android.widget.Button
 import org.hamcrest.Matchers.*
 import org.junit.Before
 import ru.spbau.mit.data.DictionaryProvider
@@ -39,7 +37,6 @@ public class AddWordActivityTest {
                 .targetContext
         return Intent(targetContext, activity)
     }
-
 
     @Before
     fun setup() {
@@ -79,7 +76,7 @@ public class AddWordActivityTest {
     /*
     if word added before hide save button
      */
-//    @Test
+    @Test
     public fun testSaveWord() {
         val intent = getIntent(AddWordActivity::class.java)
         intent.action = Intent.ACTION_SEND
@@ -96,7 +93,7 @@ public class AddWordActivityTest {
     /*
     saved word are displayed in study tab
      */
-//    @Test
+    @Test
     public fun testSaveWordInMainActivity() {
         val intent = getIntent(AddWordActivity::class.java)
         intent.action = Intent.ACTION_SEND

@@ -18,8 +18,6 @@ import uk.co.deanwild.flowtextview.FlowTextView
 
 
 class StudyActivity : AppCompatActivity() {
-
-    private lateinit var words: List<Word>
     private lateinit var flowTextView: FlowTextView
     private lateinit var imageView: ImageView
     private lateinit var wordView: TextView
@@ -42,18 +40,7 @@ class StudyActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val selection = "${DictionaryContract.WordsEntry.COLUMN_HIDDEN} = 0 AND ${DictionaryContract.WordsEntry.COLUMN_STATE} = ${DictionaryContract.WordsEntry.STATE_ON_LEARNING}"
-        val words = getWords(10, selection)
-        for (word in words) {
-            val translates = getTranslates(word)
-            val wordTranslates = ArrayList<String>()
-            for (translate in translates) {
-                val selection = "${DictionaryContract.WordsEntry.COLUMN_HIDDEN} = 1 AND ${DictionaryContract.WordsEntry._ID} = ${translate.id}"
-                val translateWord = getWords(1, selection)
-                wordTranslates.add(translateWord[0].word)
-            }
-            word.translates = wordTranslates
-        }
+        val words = wordsToLearn(10, contentResolver)
         if (words.isNotEmpty()) {
             setContentView(R.layout.activity_study)
             wordView = findViewById<TextView>(R.id.wordView)
@@ -78,7 +65,6 @@ class StudyActivity : AppCompatActivity() {
             nextButton.setOnClickListener {
                 if (current == words.size - 1) {
                     val intent = Intent(this, StartTestWordActivity::class.java)
-                    intent.putExtra(getString(R.string.words), words)
                     startActivity(intent)
                 } else {
                     show(words[++current])
@@ -102,48 +88,5 @@ class StudyActivity : AppCompatActivity() {
                 this@StudyActivity.finish()
             }
         }
-    }
-
-    private fun getWords(count: Int, selection: String): ArrayList<Word> {
-        val words: ArrayList<Word> = ArrayList()
-        contentResolver.query(
-                DictionaryProvider.CONTENT_WORDS_ENTRY,
-                null,
-                selection,
-                null,
-                null).use {
-            for (i in 0..count) {
-                if (it.moveToNext()) {
-                    val wordId = it.getInt(it.getColumnIndex(DictionaryContract.WordsEntry._ID))
-                    val word = it.getString(it.getColumnIndex(DictionaryContract.WordsEntry.COLUMN_NAME))
-                    val img = it.getBlob(it.getColumnIndexOrThrow(DictionaryContract.WordsEntry.COLUMN_IMAGE))
-                    val priority = it.getInt(it.getColumnIndexOrThrow(DictionaryContract.WordsEntry.COLUMN_PRIORITY))
-                    words.add(Word(wordId, word, emptyList(), img, priority))
-                } else {
-                    break
-                }
-            }
-        }
-        return words
-    }
-
-    private fun getTranslates(word: Word): ArrayList<Word> {
-        val translates = ArrayList<Word>()
-        contentResolver.query(
-                DictionaryProvider.CONTENT_WORDS_RELATION,
-                null,
-                "${DictionaryContract.WordsRelation.COLUMN_FROM} = ${word.id}",
-                null,
-                null).use {
-            val columns = it.columnNames
-            for (c in columns) {
-                System.out.println(c)
-            }
-            while (it.moveToNext()) {
-                val wordId = it.getInt(it.getColumnIndexOrThrow("to"))
-                translates.add(Word(wordId))
-            }
-        }
-        return translates
     }
 }

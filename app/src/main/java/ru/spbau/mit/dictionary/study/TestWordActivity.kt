@@ -43,7 +43,7 @@ class TestWordActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test_word)
-        words = intent.getSerializableExtra(getString(R.string.words)) as ArrayList<Word>
+        words = wordsToLearn(10, contentResolver)
         val answers: ArrayList<Boolean> = ArrayList()
         words.forEach { answers.add(false) }
         wordView = findViewById(R.id.wordView)

@@ -1,45 +1,25 @@
 package ru.spbau.mit.dictionary
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.support.test.InstrumentationRegistry
 import android.support.test.InstrumentationRegistry.getContext
-import android.support.test.InstrumentationRegistry.getInstrumentation
 import android.support.test.espresso.Espresso
 import android.support.test.espresso.Espresso.*
 import android.support.test.espresso.action.ViewActions.click
-import android.support.test.espresso.assertion.ViewAssertions.doesNotExist
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.intent.Intents
 import android.support.test.espresso.intent.matcher.IntentMatchers
-import android.support.test.espresso.intent.rule.IntentsTestRule
-import android.support.test.espresso.matcher.CursorMatchers
 import android.support.test.espresso.matcher.CursorMatchers.withRowString
 import android.support.test.espresso.matcher.ViewMatchers
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.rule.ActivityTestRule
-import android.view.MenuItem
-import android.view.View
-import android.widget.Button
 import org.hamcrest.Matchers.*
-import ru.spbau.mit.data.DictionaryContract
 import ru.spbau.mit.dictionary.study.StudyActivity
-import java.lang.Thread.sleep
-import android.support.test.espresso.IdlingResource
 import android.widget.ListView
 import org.junit.*
 import ru.spbau.mit.adapters.WordsCursorAdapter
-import ru.spbau.mit.data.DictionaryDbHelper
 import ru.spbau.mit.data.DictionaryProvider
-import android.database.sqlite.SQLiteDatabase
-import android.content.Context.MODE_PRIVATE
-
-
-
-
-
 
 class MainActivityTest {
 
@@ -63,18 +43,13 @@ class MainActivityTest {
         getContext().contentResolver.delete(DictionaryProvider.CONTENT_WORDS_RELATION, null, null)
     }
 
-//    @Test
+    /*
+    check that click in "Тест" launch StudyActivity
+     */
+    @Test
     public fun testMenuTest() {
-        // Open the options menu OR open the overflow menu, depending on whether
-        // the device has a hardware or software overflow menu button.
         Espresso.openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().targetContext)
-
-
-        // Click the item.
         onView(ViewMatchers.withText("Тест")).perform(click())
-
-        // Verify that we have really clicked on the icon by checking
-        // the TextView content.
         Intents.intended(IntentMatchers.hasComponent(StudyActivity::class.java.name))
     }
 

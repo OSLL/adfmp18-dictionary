@@ -20,7 +20,6 @@ class StartTestWordActivity : AppCompatActivity() {
 
     private fun startTestWordActivity() {
         val intent = Intent(this, TestWordActivity::class.java)
-        intent.putExtra(getString(R.string.words), this.intent.getSerializableExtra(getString(R.string.words)))
         startActivity(intent)
     }
 }
